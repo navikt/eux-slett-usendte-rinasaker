@@ -9,7 +9,7 @@ class EuxRinaCaseEventsKafkaListener {
 
     val log = logger {}
 
-    @KafkaListener(id = "eux-slett-usendte-rinasaker-draft-1", topics = ["eux-rina-case-events-v1"])
+    @KafkaListener(id = "eux-slett-usendte-rinasaker-draft-2", topics = ["eessibasis.eux-rina-case-events-v1"])
     fun listen(value: String?) {
         log.info { "Received kafka message: $value" }
     }
