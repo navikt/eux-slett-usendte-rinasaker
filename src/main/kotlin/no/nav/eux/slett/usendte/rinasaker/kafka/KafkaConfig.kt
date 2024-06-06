@@ -1,5 +1,6 @@
 package no.nav.eux.slett.usendte.rinasaker.kafka
 
+import no.nav.eux.slett.usendte.rinasaker.model.RinaDoc
 import org.apache.kafka.clients.consumer.ConsumerConfig.*
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.beans.factory.annotation.Value
@@ -19,21 +20,21 @@ class KafkaConfig(
 ) {
 
     @Bean
-    fun docConsumerFactory(): ConsumerFactory<String, EuxRinaCaseEventsKafkaListener.Doc> =
+    fun docConsumerFactory(): ConsumerFactory<String, RinaDoc> =
         DefaultKafkaConsumerFactory(
             mapOf(
                 BOOTSTRAP_SERVERS_CONFIG to bootstrapServers,
                 KEY_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
                 VALUE_DESERIALIZER_CLASS_CONFIG to ErrorHandlingDeserializer::class.java,
-                VALUE_DESERIALIZER_CLASS to JsonDeserializer(EuxRinaCaseEventsKafkaListener.Doc::class.java)
+                VALUE_DESERIALIZER_CLASS to JsonDeserializer(RinaDoc::class.java)
                     .javaClass.name
             )
         )
 
     @Bean
     fun docKafkaListenerContainerFactory(
-    ): ConcurrentKafkaListenerContainerFactory<String, EuxRinaCaseEventsKafkaListener.Doc> =
-        ConcurrentKafkaListenerContainerFactory<String, EuxRinaCaseEventsKafkaListener.Doc>()
+    ): ConcurrentKafkaListenerContainerFactory<String, RinaDoc> =
+        ConcurrentKafkaListenerContainerFactory<String, RinaDoc>()
             .apply {
                 consumerFactory = docConsumerFactory()
             }

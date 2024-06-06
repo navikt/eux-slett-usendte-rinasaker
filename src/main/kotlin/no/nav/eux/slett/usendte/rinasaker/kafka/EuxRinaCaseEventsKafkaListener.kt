@@ -1,7 +1,7 @@
 package no.nav.eux.slett.usendte.rinasaker.kafka
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import io.github.oshai.kotlinlogging.KotlinLogging.logger
+import no.nav.eux.slett.usendte.rinasaker.model.RinaDoc
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
@@ -29,31 +29,9 @@ class EuxRinaCaseEventsKafkaListener {
         topics = ["eessibasis.eux-rina-document-events-v1"],
         containerFactory = "docKafkaListenerContainerFactory"
     )
-    fun document(consumerRecord: ConsumerRecord<String, Doc>) {
+    fun document(consumerRecord: ConsumerRecord<String, RinaDoc>) {
         log.info { "Received document kafka message, caseId: ${consumerRecord.value().payLoad.documentMetadata.caseId}" }
         log.info { "Received document kafka message (data class): $consumerRecord, doc=${consumerRecord.value()}" }
     }
 
-//    @KafkaListener(
-//        id = "eux-slett-usendte-rinasaker-notification-draft-3",
-//        topics = ["eessibasis.eux-rina-notification-events-v1"]
-//    )
-//    fun notification(value: String?) {
-//        log.info { "Received notification kafka message: $value" }
-//    }
-
-    data class Doc(
-        val documentEventType: String,
-        val buc: String,
-        val payLoad: Payload
-    )
-
-    data class Payload(
-        @JsonProperty("DOCUMENT_METADATA")
-        val documentMetadata: DocumentMetadata
-    )
-
-    data class DocumentMetadata(
-        val caseId: String
-    )
 }
