@@ -23,7 +23,7 @@ class EuxRinaCaseEventsKafkaListener {
     fun document(doc: Doc) {
         log.info { "Received document kafka message (data class): $doc" }
     }
-    
+
     @KafkaListener(id = "eux-slett-usendte-rinasaker-notification-draft-3", topics = ["eessibasis.eux-rina-notification-events-v1"])
     fun notification(value: String?) {
         log.info { "Received notification kafka message: $value" }
