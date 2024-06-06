@@ -1,6 +1,7 @@
 package no.nav.eux.slett.usendte.rinasaker.kafka
 
 import io.github.oshai.kotlinlogging.KotlinLogging.logger
+import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
 
@@ -20,8 +21,8 @@ class EuxRinaCaseEventsKafkaListener {
     }
 
     @KafkaListener(id = "eux-slett-usendte-rinasaker-document-draft-4", topics = ["eessibasis.eux-rina-document-events-v1"])
-    fun document(doc: Doc) {
-        log.info { "Received document kafka message (data class): $doc" }
+    fun document(consumerRecord: ConsumerRecord<String, Doc>) {
+        log.info { "Received document kafka message (data class): $consumerRecord, doc=${consumerRecord.value()}" }
     }
 
     @KafkaListener(id = "eux-slett-usendte-rinasaker-notification-draft-3", topics = ["eessibasis.eux-rina-notification-events-v1"])
