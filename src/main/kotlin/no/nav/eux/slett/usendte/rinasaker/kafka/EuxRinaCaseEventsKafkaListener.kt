@@ -27,10 +27,7 @@ class EuxRinaCaseEventsKafkaListener {
     @KafkaListener(
         id = "eux-slett-usendte-rinasaker-document-draft-4",
         topics = ["eessibasis.eux-rina-document-events-v1"],
-        properties = [
-            "spring.json.value.default.type: no.nav.eux.slett.usendte.rinasaker.kafka.Doc",
-            "spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer"
-        ]
+        containerFactory = "docKafkaListenerContainerFactory"
     )
     fun document(consumerRecord: ConsumerRecord<String, Doc>) {
         log.info { "Received document kafka message, caseId: ${consumerRecord.value().payLoad.documentMetadata.caseId}" }
