@@ -18,6 +18,8 @@ spec:
           - name: {{ database.name }}
             envVarPrefix:
               DATABASE
+  kafka:
+    pool: {{ kafka.pool }}
   liveness:
     path: /actuator/health
     port: 8080
