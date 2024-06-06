@@ -15,7 +15,28 @@ import org.springframework.kafka.support.serializer.JsonDeserializer
 @Configuration
 class KafkaConfig(
     @Value("\${spring.kafka.bootstrap-servers}")
-    val bootstrapServers: String
+    val bootstrapServers: String,
+
+    @Value("\${spring.kafka.properties.security.protocol}")
+    val securityProtocol: String,
+
+    @Value("\${spring.kafka.properties.ssl.keystore.type}")
+    val keystoreType: String,
+
+    @Value("\${spring.kafka.properties.ssl.keystore.location}")
+    val keystoreLocation: String,
+
+    @Value("\${spring.kafka.properties.ssl.keystore.password}")
+    val keystorePassword: String,
+
+    @Value("\${spring.kafka.properties.ssl.truststore.type}")
+    val truststoreType: String,
+
+    @Value("\${spring.kafka.properties.ssl.truststore.location}")
+    val truststoreLocation: String,
+
+    @Value("\${spring.kafka.properties.ssl.truststore.password}")
+    val truststorePassword: String
 ) {
 
     @Bean
@@ -27,7 +48,14 @@ class KafkaConfig(
                 VALUE_DESERIALIZER_CLASS_CONFIG to ErrorHandlingDeserializer::class.java,
                 ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS to StringDeserializer::class.java.name,
                 ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS to JsonDeserializer::class.java.name,
-                JsonDeserializer.VALUE_DEFAULT_TYPE to RinaDoc::class.java.name
+                JsonDeserializer.VALUE_DEFAULT_TYPE to RinaDoc::class.java.name,
+                "security.protocol" to securityProtocol,
+                "ssl.keystore.type" to keystoreType,
+                "ssl.keystore.location" to keystoreLocation,
+                "ssl.keystore.password" to keystorePassword,
+                "ssl.truststore.type" to truststoreType,
+                "ssl.truststore.location" to truststoreLocation,
+                "ssl.truststore.password" to truststorePassword
             )
         )
 
