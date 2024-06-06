@@ -1,7 +1,9 @@
 package no.nav.eux.slett.usendte.rinasaker.kafka
 
 import no.nav.eux.slett.usendte.rinasaker.model.RinaDoc
+import org.apache.kafka.clients.CommonClientConfigs.SECURITY_PROTOCOL_CONFIG
 import org.apache.kafka.clients.consumer.ConsumerConfig.*
+import org.apache.kafka.common.config.SslConfigs.*
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -10,33 +12,18 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
 import org.springframework.kafka.core.ConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS
+import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS
 import org.springframework.kafka.support.serializer.JsonDeserializer
+import org.springframework.kafka.support.serializer.JsonDeserializer.VALUE_DEFAULT_TYPE
 
 @Configuration
 class KafkaConfig(
     @Value("\${spring.kafka.bootstrap-servers}")
     val bootstrapServers: String,
-
     @Value("\${spring.kafka.properties.security.protocol}")
     val securityProtocol: String,
-
-    @Value("\${spring.kafka.properties.ssl.keystore.type}")
-    val keystoreType: String,
-
-    @Value("\${spring.kafka.properties.ssl.keystore.location}")
-    val keystoreLocation: String,
-
-    @Value("\${spring.kafka.properties.ssl.keystore.password}")
-    val keystorePassword: String,
-
-    @Value("\${spring.kafka.properties.ssl.truststore.type}")
-    val truststoreType: String,
-
-    @Value("\${spring.kafka.properties.ssl.truststore.location}")
-    val truststoreLocation: String,
-
-    @Value("\${spring.kafka.properties.ssl.truststore.password}")
-    val truststorePassword: String
+    val kafkaSslProperties: KafkaSslProperties
 ) {
 
     @Bean
@@ -46,22 +33,21 @@ class KafkaConfig(
                 BOOTSTRAP_SERVERS_CONFIG to bootstrapServers,
                 KEY_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
                 VALUE_DESERIALIZER_CLASS_CONFIG to ErrorHandlingDeserializer::class.java,
-                ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS to StringDeserializer::class.java.name,
-                ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS to JsonDeserializer::class.java.name,
-                JsonDeserializer.VALUE_DEFAULT_TYPE to RinaDoc::class.java.name,
-                "security.protocol" to securityProtocol,
-                "ssl.keystore.type" to keystoreType,
-                "ssl.keystore.location" to keystoreLocation,
-                "ssl.keystore.password" to keystorePassword,
-                "ssl.truststore.type" to truststoreType,
-                "ssl.truststore.location" to truststoreLocation,
-                "ssl.truststore.password" to truststorePassword
+                KEY_DESERIALIZER_CLASS to StringDeserializer::class.java.name,
+                VALUE_DESERIALIZER_CLASS to JsonDeserializer::class.java.name,
+                VALUE_DEFAULT_TYPE to RinaDoc::class.java.name,
+                SECURITY_PROTOCOL_CONFIG to securityProtocol,
+                SSL_KEYSTORE_TYPE_CONFIG to kafkaSslProperties.keystore.type,
+                SSL_KEYSTORE_LOCATION_CONFIG to kafkaSslProperties.keystore.location,
+                SSL_KEYSTORE_PASSWORD_CONFIG to kafkaSslProperties.keystore.password,
+                SSL_TRUSTSTORE_TYPE_CONFIG to kafkaSslProperties.truststore.type,
+                SSL_TRUSTSTORE_LOCATION_CONFIG to kafkaSslProperties.truststore.location,
+                SSL_TRUSTSTORE_PASSWORD_CONFIG to kafkaSslProperties.truststore.password
             )
         )
 
     @Bean
-    fun docKafkaListenerContainerFactory(
-    ): ConcurrentKafkaListenerContainerFactory<String, RinaDoc> =
+    fun docKafkaListenerContainerFactory() =
         ConcurrentKafkaListenerContainerFactory<String, RinaDoc>()
             .apply {
                 consumerFactory = docConsumerFactory()

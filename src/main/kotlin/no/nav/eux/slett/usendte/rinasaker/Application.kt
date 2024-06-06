@@ -1,7 +1,9 @@
 package no.nav.eux.slett.usendte.rinasaker
 
+import no.nav.eux.slett.usendte.rinasaker.kafka.KafkaSslProperties
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 
 @EnableJwtTokenValidation(
@@ -11,6 +13,7 @@ import org.springframework.boot.runApplication
     ]
 )
 @SpringBootApplication
+@EnableConfigurationProperties(KafkaSslProperties::class)
 class Application
 
 fun main(args: Array<String>) {
