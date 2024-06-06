@@ -29,7 +29,7 @@ class EuxRinaCaseEventsKafkaListener {
         topics = ["eessibasis.eux-rina-document-events-v1"]
     )
     fun document(consumerRecord: ConsumerRecord<String, Doc>) {
-        log.info { "Received document kafka message, caseId: ${consumerRecord.value().payload.documentMetadata.caseId}" }
+        log.info { "Received document kafka message, caseId: ${consumerRecord.value().payLoad.documentMetadata.caseId}" }
         log.info { "Received document kafka message (data class): $consumerRecord, doc=${consumerRecord.value()}" }
     }
 
@@ -44,7 +44,7 @@ class EuxRinaCaseEventsKafkaListener {
     data class Doc(
         val documentEventType: String,
         val buc: String,
-        val payload: Payload
+        val payLoad: Payload
     )
 
     data class Payload(
