@@ -25,7 +25,8 @@ class KafkaConfig(
                 BOOTSTRAP_SERVERS_CONFIG to bootstrapServers,
                 KEY_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
                 VALUE_DESERIALIZER_CLASS_CONFIG to ErrorHandlingDeserializer::class.java,
-                VALUE_DESERIALIZER_CLASS to JsonDeserializer::class.java.name
+                VALUE_DESERIALIZER_CLASS to JsonDeserializer(EuxRinaCaseEventsKafkaListener.Doc::class.java)
+                    .javaClass.name
             )
         )
 
