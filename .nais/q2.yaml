@@ -1,0 +1,10 @@
+name: eux-slett-usendte-rinasaker-q2
+ingress: https://eux-slett-usendte-rinasaker-q2.intern.dev.nav.no
+
+database:
+  name: eux-slett-usendte-rinasaker-db-q2
+  tier: db-f1-micro
+
+cluster:
+  fss: dev-fss
+  gcp: dev-gcp
