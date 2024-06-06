@@ -14,7 +14,8 @@ import org.springframework.kafka.support.serializer.JsonDeserializer
 
 @Configuration
 class KafkaConfig(
-    @Value("\${spring.kafka.bootstrap-servers}") private val bootstrapServers: String
+    @Value("\${spring.kafka.bootstrap-servers}")
+    val bootstrapServers: String
 ) {
 
     @Bean
@@ -24,13 +25,13 @@ class KafkaConfig(
                 BOOTSTRAP_SERVERS_CONFIG to bootstrapServers,
                 KEY_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
                 VALUE_DESERIALIZER_CLASS_CONFIG to ErrorHandlingDeserializer::class.java,
-                VALUE_DESERIALIZER_CLASS to JsonDeserializer(EuxRinaCaseEventsKafkaListener.Doc::class.java)
+                VALUE_DESERIALIZER_CLASS to JsonDeserializer::class.java.name
             )
         )
 
     @Bean
-    fun docKafkaListenerContainerFactory():
-            ConcurrentKafkaListenerContainerFactory<String, EuxRinaCaseEventsKafkaListener.Doc> =
+    fun docKafkaListenerContainerFactory(
+    ): ConcurrentKafkaListenerContainerFactory<String, EuxRinaCaseEventsKafkaListener.Doc> =
         ConcurrentKafkaListenerContainerFactory<String, EuxRinaCaseEventsKafkaListener.Doc>()
             .apply {
                 consumerFactory = docConsumerFactory()
