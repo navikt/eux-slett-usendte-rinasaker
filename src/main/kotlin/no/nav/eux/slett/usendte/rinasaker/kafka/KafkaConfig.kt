@@ -27,7 +27,13 @@ class KafkaConfig(
 ) {
 
     @Bean
-    fun docConsumerFactory(): ConsumerFactory<String, RinaDoc> =
+    fun rinaDocKafkaListenerContainerFactory() = kafkaListenerContainerFactory<RinaDoc>()
+
+    private inline fun <reified T> kafkaListenerContainerFactory() =
+        ConcurrentKafkaListenerContainerFactory<String, T>()
+            .apply { consumerFactory = docConsumerFactory<T>() }
+
+    private inline fun <reified T> docConsumerFactory(): ConsumerFactory<String, T> =
         DefaultKafkaConsumerFactory(
             mapOf(
                 BOOTSTRAP_SERVERS_CONFIG to bootstrapServers,
@@ -35,7 +41,7 @@ class KafkaConfig(
                 VALUE_DESERIALIZER_CLASS_CONFIG to ErrorHandlingDeserializer::class.java,
                 KEY_DESERIALIZER_CLASS to StringDeserializer::class.java.name,
                 VALUE_DESERIALIZER_CLASS to JsonDeserializer::class.java.name,
-                VALUE_DEFAULT_TYPE to RinaDoc::class.java.name,
+                VALUE_DEFAULT_TYPE to T::class.java.name,
                 SECURITY_PROTOCOL_CONFIG to securityProtocol,
                 SSL_KEYSTORE_TYPE_CONFIG to kafkaSslProperties.keystore.type,
                 SSL_KEYSTORE_LOCATION_CONFIG to kafkaSslProperties.keystore.location,
@@ -45,11 +51,4 @@ class KafkaConfig(
                 SSL_TRUSTSTORE_PASSWORD_CONFIG to kafkaSslProperties.truststore.password
             )
         )
-
-    @Bean
-    fun docKafkaListenerContainerFactory() =
-        ConcurrentKafkaListenerContainerFactory<String, RinaDoc>()
-            .apply {
-                consumerFactory = docConsumerFactory()
-            }
 }

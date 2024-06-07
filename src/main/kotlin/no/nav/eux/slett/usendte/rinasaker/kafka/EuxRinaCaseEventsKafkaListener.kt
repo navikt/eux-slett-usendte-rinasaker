@@ -27,7 +27,7 @@ class EuxRinaCaseEventsKafkaListener {
     @KafkaListener(
         id = "eux-slett-usendte-rinasaker-document-draft-4",
         topics = ["eessibasis.eux-rina-document-events-v1"],
-        containerFactory = "docKafkaListenerContainerFactory"
+        containerFactory = "kafkaListenerContainerFactory"
     )
     fun document(consumerRecord: ConsumerRecord<String, RinaDoc>) {
         log.info { "Received document kafka message, caseId: ${consumerRecord.value().payLoad.documentMetadata.caseId}" }
