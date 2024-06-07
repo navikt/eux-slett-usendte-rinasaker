@@ -1,4 +1,4 @@
-package no.nav.eux.slett.usendte.rinasaker.kafka
+package no.nav.eux.slett.usendte.rinasaker.kafka.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

@@ -1,6 +1,6 @@
-package no.nav.eux.slett.usendte.rinasaker.kafka
+package no.nav.eux.slett.usendte.rinasaker.kafka.config
 
-import no.nav.eux.slett.usendte.rinasaker.model.RinaDoc
+import no.nav.eux.slett.usendte.rinasaker.kafka.model.KafkaRinaDocument
 import org.apache.kafka.clients.CommonClientConfigs.SECURITY_PROTOCOL_CONFIG
 import org.apache.kafka.clients.consumer.ConsumerConfig.*
 import org.apache.kafka.common.config.SslConfigs.*
@@ -27,7 +27,7 @@ class KafkaConfig(
 ) {
 
     @Bean
-    fun rinaDocKafkaListenerContainerFactory() = kafkaListenerContainerFactory<RinaDoc>()
+    fun rinaDocKafkaListenerContainerFactory() = kafkaListenerContainerFactory<KafkaRinaDocument>()
 
     private inline fun <reified T> kafkaListenerContainerFactory() =
         ConcurrentKafkaListenerContainerFactory<String, T>()

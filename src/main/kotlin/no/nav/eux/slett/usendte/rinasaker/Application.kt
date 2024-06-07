@@ -1,6 +1,6 @@
 package no.nav.eux.slett.usendte.rinasaker
 
-import no.nav.eux.slett.usendte.rinasaker.kafka.KafkaSslProperties
+import no.nav.eux.slett.usendte.rinasaker.kafka.config.KafkaSslProperties
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
