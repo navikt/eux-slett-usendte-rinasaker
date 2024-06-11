@@ -4,7 +4,7 @@ spring:
 
   datasource:
     hikari:
-      jdbc-url: "jdbc:postgresql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_DATABASE}"
+      jdbc-url: ${DB_JDBC_URL}
       username: ${DATABASE_USERNAME}
       password: ${DATABASE_PASSWORD}
       driver-class-name: org.postgresql.Driver
