@@ -63,3 +63,6 @@ spec:
     autoInstrumentation:
       enabled: true
       runtime: java
+  env:
+    - name: KAFKA_TOPICS_EUX_RINA_DOCUMENT_EVENTS_V1
+      value: {{ kafka.topics.eux-rina-document-events-v1 }}

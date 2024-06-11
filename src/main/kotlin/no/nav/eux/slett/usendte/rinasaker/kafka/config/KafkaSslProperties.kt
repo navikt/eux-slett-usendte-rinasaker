@@ -2,7 +2,7 @@ package no.nav.eux.slett.usendte.rinasaker.kafka.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
-@ConfigurationProperties(prefix = "spring.kafka.properties.ssl")
+@ConfigurationProperties(prefix = "kafka.properties.ssl")
 data class KafkaSslProperties(
     val keystore: StoreProperties,
     val truststore: StoreProperties

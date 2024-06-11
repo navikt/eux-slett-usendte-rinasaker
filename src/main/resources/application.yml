@@ -2,17 +2,19 @@ spring:
   main:
     banner-mode: "off"
 
-  kafka:
-    bootstrap-servers: ${KAFKA_BROKERS}
-    properties:
-      security:
-        protocol: SSL
-      ssl:
-        keystore:
-          type: PKCS12
-          location: ${KAFKA_KEYSTORE_PATH}
-          password: ${KAFKA_CREDSTORE_PASSWORD}
-        truststore:
-          type: PKCS12
-          location: ${KAFKA_TRUSTSTORE_PATH}
-          password: ${KAFKA_CREDSTORE_PASSWORD}
+kafka:
+  topics:
+    eux-rina-document-events-v1: eessibasis.eux-rina-document-events-v1
+  bootstrap-servers: ${KAFKA_BROKERS}
+  properties:
+    security:
+      protocol: SSL
+    ssl:
+      keystore:
+        type: PKCS12
+        location: ${KAFKA_KEYSTORE_PATH}
+        password: ${KAFKA_CREDSTORE_PASSWORD}
+      truststore:
+        type: PKCS12
+        location: ${KAFKA_TRUSTSTORE_PATH}
+        password: ${KAFKA_CREDSTORE_PASSWORD}

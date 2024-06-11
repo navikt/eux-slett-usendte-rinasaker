@@ -19,15 +19,15 @@ import org.springframework.kafka.support.serializer.JsonDeserializer.VALUE_DEFAU
 
 @Configuration
 class KafkaConfig(
-    @Value("\${spring.kafka.bootstrap-servers}")
+    @Value("\${kafka.bootstrap-servers}")
     val bootstrapServers: String,
-    @Value("\${spring.kafka.properties.security.protocol}")
+    @Value("\${kafka.properties.security.protocol}")
     val securityProtocol: String,
     val kafkaSslProperties: KafkaSslProperties
 ) {
 
     @Bean
-    fun rinaDocKafkaListenerContainerFactory() = kafkaListenerContainerFactory<KafkaRinaDocument>()
+    fun rinaDocumentKafkaListenerContainerFactory() = kafkaListenerContainerFactory<KafkaRinaDocument>()
 
     private inline fun <reified T> kafkaListenerContainerFactory() =
         ConcurrentKafkaListenerContainerFactory<String, T>()

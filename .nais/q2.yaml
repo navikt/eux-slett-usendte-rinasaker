@@ -7,6 +7,8 @@ database:
 
 kafka:
   pool: nav-dev
+  topics:
+    eux-rina-document-events-v1: eessibasis.eux-rina-document-events-v1
 
 cluster:
   fss: dev-fss

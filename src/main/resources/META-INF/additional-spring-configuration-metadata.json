@@ -1,0 +1,49 @@
+{
+  "properties": [
+    {
+      "name": "kafka.topics.eux-rina-document-events-v1",
+      "type": "java.lang.String",
+      "description": "Kafka topic for EUX RINA document events."
+    },
+    {
+      "name": "kafka.bootstrap-servers",
+      "type": "java.lang.String",
+      "description": "Kafka bootstrap servers."
+    },
+    {
+      "name": "kafka.properties.security.protocol",
+      "type": "java.lang.String",
+      "description": "Kafka security protocol."
+    },
+    {
+      "name": "kafka.properties.ssl.keystore.type",
+      "type": "java.lang.String",
+      "description": "Kafka SSL keystore type."
+    },
+    {
+      "name": "kafka.properties.ssl.keystore.location",
+      "type": "java.lang.String",
+      "description": "Kafka SSL keystore location."
+    },
+    {
+      "name": "kafka.properties.ssl.keystore.password",
+      "type": "java.lang.String",
+      "description": "Kafka SSL keystore password."
+    },
+    {
+      "name": "kafka.properties.ssl.truststore.type",
+      "type": "java.lang.String",
+      "description": "Kafka SSL truststore type."
+    },
+    {
+      "name": "kafka.properties.ssl.truststore.location",
+      "type": "java.lang.String",
+      "description": "Kafka SSL truststore location."
+    },
+    {
+      "name": "kafka.properties.ssl.truststore.password",
+      "type": "java.lang.String",
+      "description": "Kafka SSL truststore password."
+    }
+  ]
+}
