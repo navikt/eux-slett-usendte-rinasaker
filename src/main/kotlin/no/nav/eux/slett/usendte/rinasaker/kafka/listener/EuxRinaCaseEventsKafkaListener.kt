@@ -18,7 +18,7 @@ class EuxRinaCaseEventsKafkaListener(
 
     @KafkaListener(
         id = "eux-slett-usendte-rinasaker-case-draft-5",
-        topics = ["eessibasis.eux-rina-case-events-v1"],
+        topics = ["\${kafka.topics.eux-rina-case-events-v1}"],
         containerFactory = "rinaCaseKafkaListenerContainerFactory"
     )
     fun case(consumerRecord: ConsumerRecord<String, KafkaRinaCase>) {
@@ -26,7 +26,7 @@ class EuxRinaCaseEventsKafkaListener(
         val processDefinitionName = consumerRecord.value().payLoad.restCase.processDefinitionName
         mdc(rinasakId = caseId, bucType = processDefinitionName)
         log.info { "Mottok rina case event" }
-        service leggTilSak caseId
+        service.leggTilSak(rinasakId = caseId, bucType = processDefinitionName)
     }
 
     @KafkaListener(
@@ -35,11 +35,14 @@ class EuxRinaCaseEventsKafkaListener(
         containerFactory = "rinaDocumentKafkaListenerContainerFactory"
     )
     fun document(consumerRecord: ConsumerRecord<String, KafkaRinaDocument>) {
+        val documentEventType = consumerRecord.value().documentEventType
         val caseId = consumerRecord.value().payLoad.documentMetadata.caseId
-        val buc = consumerRecord.value().buc
-        mdc(rinasakId = caseId, bucType = buc)
+        val bucType = consumerRecord.value().buc
+        mdc(rinasakId = caseId, bucType = bucType)
         log.info { "Mottok rina document event" }
-        service leggTilDokumentFor caseId
+        when (documentEventType) {
+            "SENT_DOCUMENT" -> service.leggTilDokument(rinasakId = caseId, bucType = bucType)
+            else -> log.info { "Mottok documentEventType, ignorerer: $documentEventType" }
+        }
     }
-
 }
