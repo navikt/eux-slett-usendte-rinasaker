@@ -1,4 +1,4 @@
-package no.nav.eux.slett.usendte.rinasaker.persistence
+package no.nav.eux.slett.usendte.rinasaker.persistence.repository
 
 import no.nav.eux.slett.usendte.rinasaker.model.RinasakStatus
 import org.springframework.data.jpa.repository.JpaRepository

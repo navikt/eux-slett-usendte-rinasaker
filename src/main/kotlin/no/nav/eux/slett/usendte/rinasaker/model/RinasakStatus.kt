@@ -12,6 +12,7 @@ data class RinasakStatus(
     val rinasakStatusUuid: UUID,
     val rinasakId: Int,
     val status: String,
+    val bucType: String,
     @Column(updatable = false)
     val opprettetBruker: String,
     @Column(updatable = false)

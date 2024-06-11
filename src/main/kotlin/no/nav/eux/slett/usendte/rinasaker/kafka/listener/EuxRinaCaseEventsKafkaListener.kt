@@ -3,12 +3,16 @@ package no.nav.eux.slett.usendte.rinasaker.kafka.listener
 import io.github.oshai.kotlinlogging.KotlinLogging.logger
 import no.nav.eux.slett.usendte.rinasaker.kafka.model.case.KafkaRinaCase
 import no.nav.eux.slett.usendte.rinasaker.kafka.model.document.KafkaRinaDocument
+import no.nav.eux.slett.usendte.rinasaker.service.SlettUsendteRinasakerService
+import no.nav.eux.slett.usendte.rinasaker.service.mdc
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
 
 @Service
-class EuxRinaCaseEventsKafkaListener {
+class EuxRinaCaseEventsKafkaListener(
+    val service: SlettUsendteRinasakerService
+) {
 
     val log = logger {}
 
@@ -18,8 +22,11 @@ class EuxRinaCaseEventsKafkaListener {
         containerFactory = "rinaCaseKafkaListenerContainerFactory"
     )
     fun case(consumerRecord: ConsumerRecord<String, KafkaRinaCase>) {
-        log.info { "Received case kafka message, caseId: ${consumerRecord.value().payLoad.documentMetadata.caseId}" }
-        log.info { "Received case kafka message (data class): $consumerRecord, case=${consumerRecord.value()}" }
+        val caseId = consumerRecord.value().payLoad.restCase.id
+        val processDefinitionName = consumerRecord.value().payLoad.restCase.processDefinitionName
+        mdc(rinasakId = caseId, bucType = processDefinitionName)
+        log.info { "Mottok rina case event" }
+        service leggTilSak caseId
     }
 
     @KafkaListener(
@@ -28,8 +35,11 @@ class EuxRinaCaseEventsKafkaListener {
         containerFactory = "rinaDocumentKafkaListenerContainerFactory"
     )
     fun document(consumerRecord: ConsumerRecord<String, KafkaRinaDocument>) {
-        log.info { "Received document kafka message, caseId: ${consumerRecord.value().payLoad.documentMetadata.caseId}" }
-        log.info { "Received document kafka message (data class): $consumerRecord, doc=${consumerRecord.value()}" }
+        val caseId = consumerRecord.value().payLoad.documentMetadata.caseId
+        val buc = consumerRecord.value().buc
+        mdc(rinasakId = caseId, bucType = buc)
+        log.info { "Mottok rina document event" }
+        service leggTilDokumentFor caseId
     }
 
 }

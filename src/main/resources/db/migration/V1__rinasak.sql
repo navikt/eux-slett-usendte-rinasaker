@@ -3,6 +3,7 @@ CREATE TABLE rinasak_status
     rinasak_status_uuid uuid primary key,
     rinasak_id          integer   not null,
     status              text      not null,
+    buc_type            text      not null,
     opprettet_bruker    text      not null,
     opprettet_tidspunkt timestamp not null,
     endret_bruker       text      not null,
