@@ -1,4 +1,4 @@
-package no.nav.eux.slett.usendte.rinasaker.kafka.model
+package no.nav.eux.slett.usendte.rinasaker.kafka.model.document
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

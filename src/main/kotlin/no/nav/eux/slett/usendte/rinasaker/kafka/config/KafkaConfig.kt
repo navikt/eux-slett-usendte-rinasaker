@@ -1,6 +1,7 @@
 package no.nav.eux.slett.usendte.rinasaker.kafka.config
 
-import no.nav.eux.slett.usendte.rinasaker.kafka.model.KafkaRinaDocument
+import no.nav.eux.slett.usendte.rinasaker.kafka.model.case.KafkaRinaCase
+import no.nav.eux.slett.usendte.rinasaker.kafka.model.document.KafkaRinaDocument
 import org.apache.kafka.clients.CommonClientConfigs.SECURITY_PROTOCOL_CONFIG
 import org.apache.kafka.clients.consumer.ConsumerConfig.*
 import org.apache.kafka.common.config.SslConfigs.*
@@ -25,6 +26,9 @@ class KafkaConfig(
     val securityProtocol: String,
     val kafkaSslProperties: KafkaSslProperties
 ) {
+
+    @Bean
+    fun rinaCaseKafkaListenerContainerFactory() = kafkaListenerContainerFactory<KafkaRinaCase>()
 
     @Bean
     fun rinaDocumentKafkaListenerContainerFactory() = kafkaListenerContainerFactory<KafkaRinaDocument>()

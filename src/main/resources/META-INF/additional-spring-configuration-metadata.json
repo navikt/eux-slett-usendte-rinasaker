@@ -44,6 +44,11 @@
       "name": "kafka.properties.ssl.truststore.password",
       "type": "java.lang.String",
       "description": "Kafka SSL truststore password."
+    },
+    {
+      "name": "kafka.topics.eux-rina-case-events-v1",
+      "type": "java.lang.String",
+      "description": "Description for kafka.topics.eux-rina-case-events-v1."
     }
   ]
 }

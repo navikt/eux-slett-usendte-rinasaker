@@ -4,7 +4,8 @@ spring:
 
 kafka:
   topics:
-    eux-rina-document-events-v1: eessibasis.eux-rina-document-events-v1
+    eux-rina-document-events-v1: ${KAFKA_TOPICS_EUX_RINA_DOCUMENT_EVENTS_V1}
+    eux-rina-case-events-v1: ${KAFKA_TOPICS_EUX_RINA_CASE_EVENTS_V1}
   bootstrap-servers: ${KAFKA_BROKERS}
   properties:
     security:
