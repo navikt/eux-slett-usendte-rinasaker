@@ -4,7 +4,7 @@ import org.slf4j.MDC
 import java.util.*
 
 fun <T> T.mdc(
-    arkivarprosess: String? = null,
+    sletteprosess: String? = null,
     rinasakId: Int? = null,
     dokumentInfoId: String? = null,
     sedId: UUID? = null,
@@ -13,7 +13,7 @@ fun <T> T.mdc(
     bucType : String? = null,
     journalpostId: String? = null,
 ): T {
-    "arkivarprosess" leggTil arkivarprosess
+    "sletteprosess" leggTil sletteprosess
     "rinasakId" leggTil rinasakId
     "dokumentInfoId" leggTil dokumentInfoId
     "sedId" leggTil sedId
@@ -25,7 +25,7 @@ fun <T> T.mdc(
 }
 
 fun clearLocalMdc() {
-    MDC.remove("arkivarprosess")
+    MDC.remove("sletteprosess")
     MDC.remove("rinaSakId")
     MDC.remove("dokumentInfoId")
     MDC.remove("sedId")
@@ -36,7 +36,7 @@ fun clearLocalMdc() {
 }
 
 fun <T> T.setAndClearLocalMdc(
-    arkivarprosess: String? = null,
+    sletteprosess: String? = null,
     rinasakId: Int? = null,
     dokumentInfoId: String? = null,
     sedId: UUID? = null,
@@ -47,7 +47,7 @@ fun <T> T.setAndClearLocalMdc(
 ) {
     clearLocalMdc()
     mdc(
-        arkivarprosess = arkivarprosess,
+        sletteprosess = sletteprosess,
         rinasakId = rinasakId,
         dokumentInfoId = dokumentInfoId,
         sedId = sedId,
