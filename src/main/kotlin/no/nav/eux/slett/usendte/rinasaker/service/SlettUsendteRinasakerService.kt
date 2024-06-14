@@ -26,7 +26,24 @@ class SlettUsendteRinasakerService(
     fun settUsendteRinasakerTilSletting() {
         repository
             .findAllByStatusAndOpprettetTidspunktBefore(NY_SAK, now().minusDays(1))
+            .filter { it.kanSlettes() }
             .forEach { it.settTilSletting() }
+    }
+
+    fun RinasakStatus.kanSlettes(): Boolean {
+        mdc(rinasakId = rinasakId, bucType = bucType)
+        val kanSlettes = try {
+            rinaSlettClient.kanSlettes(rinasakId)
+        } catch (e: Exception) {
+            log.error(e) { "Kunne ikke hente status for rinasak $rinasakId" }
+            false
+        }
+        if (!kanSlettes) {
+            log.info { "Rinasak $rinasakId kan ikke slettes" }
+            repository.save(copy(status = KAN_IKKE_SLETTES, endretTidspunkt = now()))
+            log.info { "Rinasak status oppdatert" }
+        }
+        return kanSlettes
     }
 
     fun RinasakStatus.trySlett() =
@@ -39,7 +56,7 @@ class SlettUsendteRinasakerService(
 
     fun RinasakStatus.slett() {
         mdc(rinasakId = rinasakId, bucType = bucType)
-        rinaSlettClient.slettRinaSak(rinasakId)
+        rinaSlettClient.slettRinasak(rinasakId)
         log.info { "Rinasak slettet" }
         repository.save(copy(status = SLETTET, endretTidspunkt = now()))
         log.info { "Rinasak status oppdatert" }

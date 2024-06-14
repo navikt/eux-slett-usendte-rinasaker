@@ -14,3 +14,9 @@ kafka:
 cluster:
   fss: dev-fss
   gcp: dev-gcp
+
+application:
+  eux-rina-terminator-api:
+    name: eux-rina-terminator-api-q2
+    endpoint: http://eux-rina-terminator-api-q2
+    scope: api://dev-gcp.eessibasis.eux-rina-terminator-api-q2/.default

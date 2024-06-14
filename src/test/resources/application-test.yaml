@@ -1,0 +1,44 @@
+no.nav.security.jwt:
+  expirythreshold: 1
+  issuer:
+    azuread:
+      discoveryurl: http://localhost:${mock-oauth2-server.port}/issuer1/.well-known/openid-configuration
+      accepted_audience: demoapplication
+
+  client:
+    registration:
+
+      eux-rina-terminator-api-credentials:
+        token-endpoint-url: http://localhost:9500/mock/oauth2/v2.0/token
+        grant-type: client_credentials
+        scope: test
+        authentication:
+          client-id: cluster:namespace:app1
+          client-jwk: src/test/resources/jwk.json
+          client-auth-method: private_key_jwt
+
+endpoint:
+  eux-rina-terminator-api: http://localhost:9500/mock
+
+kafka:
+  topics:
+    eux-rina-document-events-v1: eessibasis.eux-rina-document-events-v1
+    eux-rina-case-events-v1: eessibasis.eux-rina-case-events-v1
+  properties:
+    security:
+      protocol: PLAINTEXT
+
+spring:
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+             packages: no.nav.eux.slett.usendte.rinasaker.webapp

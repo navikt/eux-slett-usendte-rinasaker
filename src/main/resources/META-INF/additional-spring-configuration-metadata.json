@@ -49,6 +49,51 @@
       "name": "kafka.topics.eux-rina-case-events-v1",
       "type": "java.lang.String",
       "description": "Description for kafka.topics.eux-rina-case-events-v1."
+    },
+    {
+      "name": "no.nav.security.jwt.client.registration.eux-rina-terminator-api-credentials.token-endpoint-url",
+      "type": "java.lang.String",
+      "description": "Description for no.nav.security.jwt.client.registration.eux-rina-terminator-api-credentials.token-endpoint-url."
+    },
+    {
+      "name": "no.nav.security.jwt.client.registration.eux-rina-terminator-api-credentials.grant-type",
+      "type": "java.lang.String",
+      "description": "Description for no.nav.security.jwt.client.registration.eux-rina-terminator-api-credentials.grant-type."
+    },
+    {
+      "name": "no.nav.security.jwt.client.registration.eux-rina-terminator-api-credentials.scope",
+      "type": "java.lang.String",
+      "description": "Description for no.nav.security.jwt.client.registration.eux-rina-terminator-api-credentials.scope."
+    },
+    {
+      "name": "no.nav.security.jwt.client.registration.eux-rina-terminator-api-credentials.authentication.client-id",
+      "type": "java.lang.String",
+      "description": "Description for no.nav.security.jwt.client.registration.eux-rina-terminator-api-credentials.authentication.client-id."
+    },
+    {
+      "name": "no.nav.security.jwt.client.registration.eux-rina-terminator-api-credentials.authentication.client-jwk",
+      "type": "java.lang.String",
+      "description": "Description for no.nav.security.jwt.client.registration.eux-rina-terminator-api-credentials.authentication.client-jwk."
+    },
+    {
+      "name": "no.nav.security.jwt.client.registration.eux-rina-terminator-api-credentials.authentication.client-auth-method",
+      "type": "java.lang.String",
+      "description": "Description for no.nav.security.jwt.client.registration.eux-rina-terminator-api-credentials.authentication.client-auth-method."
+    },
+    {
+      "name": "endpoint.eux-rina-terminator-api",
+      "type": "java.lang.String",
+      "description": "Description for endpoint.eux-rina-terminator-api."
+    },
+    {
+      "name": "no.nav.security.jwt.issuer.azuread.discoveryurl",
+      "type": "java.lang.String",
+      "description": "Description for no.nav.security.jwt.issuer.azuread.discoveryurl."
+    },
+    {
+      "name": "no.nav.security.jwt.issuer.azuread.accepted-audience",
+      "type": "java.lang.String",
+      "description": "Description for no.nav.security.jwt.issuer.azuread.accepted-audience."
     }
   ]
 }

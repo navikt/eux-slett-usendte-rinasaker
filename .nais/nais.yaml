@@ -63,8 +63,17 @@ spec:
     autoInstrumentation:
       enabled: true
       runtime: java
+  accessPolicy:
+    outbound:
+      rules:
+        - application: {{ application.eux-rina-terminator-api.name }}
   env:
     - name: KAFKA_TOPICS_EUX_RINA_DOCUMENT_EVENTS_V1
       value: {{ kafka.topics.eux-rina-document-events-v1 }}
     - name: KAFKA_TOPICS_EUX_RINA_CASE_EVENTS_V1
       value: {{ kafka.topics.eux-rina-case-events-v1 }}
+
+    - name: EUX_RINA_TERMINATOR_API_ENDPOINT
+      value: {{ application.eux-rina-terminator-api.endpoint }}
+    - name: EUX_RINA_TERMINATOR_API_SCOPE
+      value: {{ application.eux-rina-terminator-api.scope }}
