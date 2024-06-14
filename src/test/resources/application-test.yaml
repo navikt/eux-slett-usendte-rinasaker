@@ -41,4 +41,4 @@ spring:
         spring:
           json:
             trusted:
-             packages: no.nav.eux.slett.usendte.rinasaker.webapp
+             packages: no.nav.eux.slett.usendte.rinasaker

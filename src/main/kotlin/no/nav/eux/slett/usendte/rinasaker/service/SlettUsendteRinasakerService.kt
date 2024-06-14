@@ -72,14 +72,20 @@ class SlettUsendteRinasakerService(
     }
 
     fun leggTilDokument(rinasakId: Int, bucType: String) {
-        val rinasakStatus = repository.findByRinasakId(rinasakId)
+        val rinasakStatus = repository
+            .findByRinasakId(rinasakId)
+            ?: rinasakStatus(rinasakId, bucType, DOKUMENT_SENT)
         repository.save(rinasakStatus.copy(status = DOKUMENT_SENT))
         log.info { "Dokument lagt til" }
     }
 
     fun leggTilSak(rinasakId: Int, bucType: String) {
-        val rinasakStatus = rinasakStatus(rinasakId, bucType, NY_SAK)
-        repository.save(rinasakStatus)
+//        log.info { "asdf:   ${repository.findByRinasakId(rinasakId)}" }
+        val status = repository
+            .findByRinasakId(rinasakId)
+            ?.copy(endretTidspunkt = now())
+            ?: rinasakStatus(rinasakId, bucType, NY_SAK)
+        repository.save(status)
         log.info { "Sak lagt til" }
     }
 

@@ -8,7 +8,7 @@ import java.util.*
 
 @Repository
 interface RinasakStatusRepository : JpaRepository<RinasakStatus, UUID> {
-    fun findByRinasakId(rinasakId: Int): RinasakStatus
+    fun findByRinasakId(rinasakId: Int): RinasakStatus?
 
     fun findAllByStatusAndOpprettetTidspunktBefore(
         status: RinasakStatus.Status,
