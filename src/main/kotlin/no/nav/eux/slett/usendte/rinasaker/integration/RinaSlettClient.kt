@@ -19,7 +19,7 @@ class RinaSlettClient(
     fun slettRinasak(rinasakId: Int) {
         euxRinaTerminatorApiRestTemplate
             .delete()
-            .uri("${euxRinaTerminatorApiEndpoint}/api/v1/$rinasakId")
+            .uri("${euxRinaTerminatorApiEndpoint}/api/v1/rinasaker/$rinasakId")
             .retrieve()
             .toBodilessEntity()
         log.info { "Sletter $rinasakId" }
@@ -27,7 +27,7 @@ class RinaSlettClient(
 
     fun kanSlettes(rinasakId: Int) = euxRinaTerminatorApiRestTemplate
         .get()
-        .uri("${euxRinaTerminatorApiEndpoint}/api/v1/$rinasakId/status")
+        .uri("${euxRinaTerminatorApiEndpoint}/api/v1/rinasaker/$rinasakId/status")
         .accept(APPLICATION_JSON)
         .retrieve()
         .body<EuxRinasakStatus>()

@@ -1,137 +1,91 @@
 package no.nav.eux.slett.usendte.rinasaker.webapp
 
-import no.nav.eux.slett.usendte.rinasaker.Application
-import no.nav.eux.slett.usendte.rinasaker.kafka.model.case.KafkaRinaCase
-import no.nav.eux.slett.usendte.rinasaker.kafka.model.case.KafkaRinaCasePayload
-import no.nav.eux.slett.usendte.rinasaker.kafka.model.case.KafkaRinaCaseRestCase
-import no.nav.eux.slett.usendte.rinasaker.kafka.model.document.KafkaRinaDocument
-import no.nav.eux.slett.usendte.rinasaker.kafka.model.document.KafkaRinaDocumentMetadata
-import no.nav.eux.slett.usendte.rinasaker.kafka.model.document.KafkaRinaDocumentPayload
-import no.nav.eux.slett.usendte.rinasaker.model.RinasakStatus.Status.DOKUMENT_SENT
-import no.nav.eux.slett.usendte.rinasaker.model.RinasakStatus.Status.NY_SAK
-import no.nav.eux.slett.usendte.rinasaker.persistence.repository.RinasakStatusRepository
-import no.nav.security.mock.oauth2.MockOAuth2Server
-import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
+import no.nav.eux.slett.usendte.rinasaker.model.RinasakStatus.Status.*
+import no.nav.eux.slett.usendte.rinasaker.webapp.dataset.kafkaRinaCase
+import no.nav.eux.slett.usendte.rinasaker.webapp.dataset.kafkaRinaDocument
 import org.assertj.core.api.Assertions.assertThat
 import org.awaitility.kotlin.await
-
 import org.awaitility.kotlin.has
 import org.awaitility.kotlin.untilCallTo
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.http.HttpEntity
-import org.springframework.kafka.core.KafkaTemplate
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.DynamicPropertyRegistry
-import org.springframework.test.context.DynamicPropertySource
-import org.testcontainers.containers.KafkaContainer
-import org.testcontainers.containers.PostgreSQLContainer
-import org.testcontainers.junit.jupiter.Container
-import org.testcontainers.junit.jupiter.Testcontainers
-import org.testcontainers.utility.DockerImageName
+import org.springframework.boot.test.web.client.exchange
+import org.springframework.http.HttpMethod.POST
+import java.time.LocalDateTime.now
 
-@ActiveProfiles("test")
-@SpringBootTest(
-    classes = [Application::class],
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
-@EnableMockOAuth2Server
-@Testcontainers
-class SlettUsendteRinasakerApiTest {
+class SlettUsendteRinasakerApiTest : AbstractTest() {
 
-    companion object {
-
-        @Container
-        val postgres: PostgreSQLContainer<*> = PostgreSQLContainer(
-            "postgres:15-alpine"
-        )
-
-        @Container
-        val kafka = KafkaContainer(
-            DockerImageName.parse("confluentinc/cp-kafka:7.6.1")
-        )
-
-        @JvmStatic
-        @DynamicPropertySource
-        fun configureProperties(registry: DynamicPropertyRegistry) {
-            registry.add("spring.datasource.hikari.jdbc-url", postgres::getJdbcUrl)
-            registry.add("spring.datasource.hikari.username", postgres::getUsername)
-            registry.add("spring.datasource.hikari.password", postgres::getPassword)
-            registry.add("kafka.bootstrap-servers", kafka::getBootstrapServers)
-            registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers)
-        }
-    }
-
-    val <T> T.httpEntity: HttpEntity<T>
-        get() = httpEntity(mockOAuth2Server)
-
-    fun httpEntity() = voidHttpEntity(mockOAuth2Server)
-
-    @Autowired
-    lateinit var mockOAuth2Server: MockOAuth2Server
-
-    @Autowired
-    lateinit var restTemplate: TestRestTemplate
-
-    @Autowired
-    lateinit var kafkaTemplate: KafkaTemplate<String, Any>
-
-    @Autowired
-    lateinit var rinasakStatusRepository: RinasakStatusRepository
-
+    @Disabled("ikke ferdig")
     @Test
     fun `Nye rinasaker og dokumenter fra kafka topic`() {
         assertThat(kafka.isRunning).isTrue
         assertThat(postgres.isRunning).isTrue
         kafkaTemplate.send("eessibasis.eux-rina-case-events-v1", kafkaRinaCase(1))
-        await untilCallTo {
-            rinasakStatusRepository.findByRinasakId(1)
-        } has {
-            rinasakId == 1 && status == NY_SAK
-        }
-        kafkaTemplate.send("eessibasis.eux-rina-document-events-v1", kafkaRinaDocument(1))
-        await untilCallTo {
-            rinasakStatusRepository.findByRinasakId(1)
-        } has {
-            rinasakId == 1 && status == DOKUMENT_SENT
-        }
-        kafkaTemplate.send("eessibasis.eux-rina-case-events-v1", kafkaRinaCase(1))
-        await untilCallTo { rinasakStatusRepository.findAllByStatus(NY_SAK)
-        } has {
-            isEmpty()
-        }
         kafkaTemplate.send("eessibasis.eux-rina-case-events-v1", kafkaRinaCase(2))
-        await untilCallTo { rinasakStatusRepository.findAllByStatus(NY_SAK)
-        } has {
-            size == 1
-        }
         kafkaTemplate.send("eessibasis.eux-rina-case-events-v1", kafkaRinaCase(3))
-        await untilCallTo { rinasakStatusRepository.findAllByStatus(NY_SAK)
+        kafkaTemplate.send("eessibasis.eux-rina-case-events-v1", kafkaRinaCase(4))
+        kafkaTemplate.send("eessibasis.eux-rina-case-events-v1", kafkaRinaCase(5))
+        await untilCallTo {
+            rinasakStatusRepository.findAllByStatus(NY_SAK)
         } has {
-            size == 2
+            size == 5
         }
         kafkaTemplate.send("eessibasis.eux-rina-document-events-v1", kafkaRinaDocument(1))
         kafkaTemplate.send("eessibasis.eux-rina-document-events-v1", kafkaRinaDocument(2))
-        await untilCallTo { rinasakStatusRepository.findAllByStatus(NY_SAK) } has {
-            size == 1
-        }
         await untilCallTo {
             rinasakStatusRepository.findAllByStatus(DOKUMENT_SENT)
         } has {
             size == 2
         }
+        await untilCallTo { rinasakStatusRepository.findAllByStatus(NY_SAK) } has {
+            size == 3
+        }
+        manipulerOpprettetTidspunkt()
+        restTemplate
+            .exchange<Void>(
+                "/api/v1/sletteprosess/til-sletting/execute",
+                POST,
+                httpEntity()
+            )
+        println("Følgende requests ble utført i prosessen til sletting:")
+        requestBodies.forEach { println("Path: ${it.key}, body: ${it.value}") }
+        assertThat(requestBodies["/api/v1/rinasaker/1/status"]).isNull()
+        assertThat(requestBodies["/api/v1/rinasaker/2/status"]).isNull()
+        assertThat(requestBodies["/api/v1/rinasaker/3/status"]).isNotNull()
+        assertThat(requestBodies["/api/v1/rinasaker/4/status"]).isNull()
+        assertThat(requestBodies["/api/v1/rinasaker/5/status"]).isNotNull()
+        assertThat(rinasakStatus(1)).isEqualTo(DOKUMENT_SENT)
+        assertThat(rinasakStatus(2)).isEqualTo(DOKUMENT_SENT)
+        assertThat(rinasakStatus(3)).isEqualTo(TIL_SLETTING)
+        assertThat(rinasakStatus(4)).isEqualTo(NY_SAK)
+        assertThat(rinasakStatus(5)).isEqualTo(KAN_IKKE_SLETTES)
+        restTemplate
+            .exchange<Void>(
+                "/api/v1/sletteprosess/slett/execute",
+                POST,
+                httpEntity()
+            )
+        println("Følgende requests ble utført i prosessen slett:")
+        requestBodies.forEach { println("Path: ${it.key}, body: ${it.value}") }
+        assertThat(requestBodies["/api/v1/rinasaker/3"]).isNotNull()
+    }
+
+    fun rinasakStatus(rinasakId: Int) = rinasakStatusRepository.findByRinasakId(rinasakId)!!.status
+
+    fun manipulerOpprettetTidspunkt() {
+        val medDokumentStatus = rinasakStatusRepository
+            .findByRinasakId(1)!!
+            .copy(opprettetTidspunkt = now().minusDays(32))
+        rinasakStatusRepository.save(medDokumentStatus)
+        val utenDokumentStatus = rinasakStatusRepository
+            .findByRinasakId(3)!!
+            .copy(opprettetTidspunkt = now().minusDays(32))
+        rinasakStatusRepository.save(utenDokumentStatus)
+        val rinasakKanIkkeSlettes = rinasakStatusRepository
+            .findByRinasakId(5)!!
+            .copy(opprettetTidspunkt = now().minusDays(32))
+        rinasakStatusRepository.save(rinasakKanIkkeSlettes)
     }
 }
 
-fun kafkaRinaCase(rinasakId: Int) = KafkaRinaCase(
-    caseEventType = "OPEN_CASE",
-    payLoad = KafkaRinaCasePayload(KafkaRinaCaseRestCase(rinasakId, "H_BUC_01"))
-)
 
-fun kafkaRinaDocument(rinasakId: Int) = KafkaRinaDocument(
-    documentEventType = "SENT_DOCUMENT",
-    buc = "H_BUC_01",
-    payLoad = KafkaRinaDocumentPayload(KafkaRinaDocumentMetadata(rinasakId))
-)

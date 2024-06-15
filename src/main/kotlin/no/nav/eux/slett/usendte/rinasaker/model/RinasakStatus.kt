@@ -1,6 +1,5 @@
 package no.nav.eux.slett.usendte.rinasaker.model
 
-import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType.STRING
 import jakarta.persistence.Enumerated
@@ -17,9 +16,7 @@ data class RinasakStatus(
     @Enumerated(STRING)
     val status: Status,
     val bucType: String,
-    @Column(updatable = false)
     val opprettetBruker: String = "ukjent",
-    @Column(updatable = false)
     val opprettetTidspunkt: LocalDateTime = now(),
     val endretBruker: String = "ukjent",
     val endretTidspunkt: LocalDateTime = now(),
