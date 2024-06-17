@@ -7,17 +7,15 @@ import org.assertj.core.api.Assertions.assertThat
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.has
 import org.awaitility.kotlin.untilCallTo
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.web.client.exchange
 import org.springframework.http.HttpMethod.POST
 import java.time.LocalDateTime.now
 
-class SlettUsendteRinasakerApiTest : AbstractTest() {
+class SlettUsendteRinasakerTest : AbstractTest() {
 
-    @Disabled("ikke ferdig")
     @Test
-    fun `Nye rinasaker og dokumenter fra kafka topic`() {
+    fun `Nye rinasaker og dokumenter fra Kafka - sletting staged og eksekvert`() {
         assertThat(kafka.isRunning).isTrue
         assertThat(postgres.isRunning).isTrue
         kafkaTemplate.send("eessibasis.eux-rina-case-events-v1", kafkaRinaCase(1))
@@ -87,5 +85,3 @@ class SlettUsendteRinasakerApiTest : AbstractTest() {
         rinasakStatusRepository.save(rinasakKanIkkeSlettes)
     }
 }
-
-

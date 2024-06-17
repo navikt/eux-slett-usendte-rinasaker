@@ -72,5 +72,4 @@ abstract class AbstractTest {
 
     @Autowired
     lateinit var requestBodies: RequestBodies
-
 }
