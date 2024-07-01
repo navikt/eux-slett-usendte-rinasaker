@@ -8,8 +8,8 @@ database:
 kafka:
   pool: nav-dev
   topics:
-    eux-rina-document-events-v1: eessibasis.eux-rina-document-events-v1
-    eux-rina-case-events-v1: eessibasis.eux-rina-case-events-v1
+    eux-rina-document-events-v1: eessibasis.eux-rina-document-events-v1-q2
+    eux-rina-case-events-v1: eessibasis.eux-rina-case-events-v1-q2
 
 cluster:
   fss: dev-fss
