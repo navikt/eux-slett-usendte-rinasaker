@@ -6,7 +6,7 @@ database:
   tier: db-custom-1-3840
 
 kafka:
-  pool: nav-dev
+  pool: nav-prod
   topics:
     eux-rina-document-events-v1: eessibasis.eux-rina-document-events-v1
     eux-rina-case-events-v1: eessibasis.eux-rina-case-events-v1
