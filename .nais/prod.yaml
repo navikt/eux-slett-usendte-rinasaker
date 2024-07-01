@@ -5,6 +5,18 @@ database:
   name: eux-slett-usendte-rinasaker-db
   tier: db-custom-1-3840
 
+kafka:
+  pool: nav-dev
+  topics:
+    eux-rina-document-events-v1: eessibasis.eux-rina-document-events-v1
+    eux-rina-case-events-v1: eessibasis.eux-rina-case-events-v1
+
 cluster:
   fss: prod-fss
   gcp: prod-gcp
+
+application:
+  eux-rina-terminator-api:
+    name: eux-rina-terminator-api
+    endpoint: http://eux-rina-terminator-api
+    scope: api://dev-gcp.eessibasis.eux-rina-terminator-api/.default
