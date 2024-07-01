@@ -67,7 +67,7 @@ class SlettUsendteRinasakerApi(
         @Parameter(
             description = """
                 Navnet på prosessen som skal startes:   
-                    * `til sletting` - Markerer usendte rinasaker for sletting   
+                    * `til-sletting` - Markerer usendte rinasaker for sletting   
                     * `slett` - Utfører sletting mot Rina
                     """,
             required = true

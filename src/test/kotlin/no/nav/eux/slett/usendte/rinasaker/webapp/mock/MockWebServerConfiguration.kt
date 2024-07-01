@@ -2,8 +2,6 @@ package no.nav.eux.slett.usendte.rinasaker.webapp.mock
 
 import io.github.oshai.kotlinlogging.KotlinLogging.logger
 import jakarta.annotation.PreDestroy
-import no.nav.eux.journalarkivar.webapp.mock.mockResponse
-import no.nav.eux.journalarkivar.webapp.mock.uriEndsWith
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer

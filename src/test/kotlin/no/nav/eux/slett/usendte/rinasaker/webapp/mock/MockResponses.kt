@@ -1,9 +1,5 @@
-package no.nav.eux.journalarkivar.webapp.mock
+package no.nav.eux.slett.usendte.rinasaker.webapp.mock
 
-import no.nav.eux.slett.usendte.rinasaker.webapp.mock.getEuxRinaTerminatorApiStatusResponseFalse
-import no.nav.eux.slett.usendte.rinasaker.webapp.mock.getEuxRinaTerminatorApiStatusResponseTrue
-import no.nav.eux.slett.usendte.rinasaker.webapp.mock.response204
-import no.nav.eux.slett.usendte.rinasaker.webapp.mock.tokenResponse
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.RecordedRequest
 import org.springframework.http.HttpHeaders.CONTENT_TYPE
