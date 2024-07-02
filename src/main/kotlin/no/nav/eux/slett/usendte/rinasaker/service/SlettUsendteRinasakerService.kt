@@ -25,7 +25,7 @@ class SlettUsendteRinasakerService(
 
     fun settUsendteRinasakerTilSletting() {
         repository
-            .findAllByStatusAndOpprettetTidspunktBefore(NY_SAK, now())
+            .findAllByStatusAndOpprettetTidspunktBefore(NY_SAK, now().minusDays(15))
             .also { log.info { "$it nye saker ble funnet" } }
             .filter { it.kanSlettes() }
             .forEach { it.settTilSletting() }
@@ -86,7 +86,7 @@ class SlettUsendteRinasakerService(
             ?.copy(endretTidspunkt = now())
             ?: rinasakStatus(rinasakId, bucType, NY_SAK)
         repository.save(status)
-        log.info { "Sak lagt til" }
+        log.info { "Sak oppdatert eller lagt til" }
     }
 
     fun rinasakStatus(
