@@ -17,7 +17,7 @@ class EuxRinaCaseEventsKafkaListener(
     val log = logger {}
 
     @KafkaListener(
-        id = "eux-slett-usendte-rinasaker-case-draft-5",
+        id = "eux-slett-usendte-rinasaker-case",
         topics = ["\${kafka.topics.eux-rina-case-events-v1}"],
         containerFactory = "rinaCaseKafkaListenerContainerFactory"
     )
@@ -30,7 +30,7 @@ class EuxRinaCaseEventsKafkaListener(
     }
 
     @KafkaListener(
-        id = "eux-slett-usendte-rinasaker-document-draft-5",
+        id = "eux-slett-usendte-rinasaker-document",
         topics = ["\${kafka.topics.eux-rina-document-events-v1}"],
         containerFactory = "rinaDocumentKafkaListenerContainerFactory"
     )
