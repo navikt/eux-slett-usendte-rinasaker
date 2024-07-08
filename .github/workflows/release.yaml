@@ -102,3 +102,18 @@ jobs:
           VAR: image=${{ needs.build.outputs.docker-image }}
           VARS: .nais/q2.yaml
           PRINT_PAYLOAD: true
+
+  deploy-prod:
+    name: 'Deploy to prod'
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: 'Calling nais deploy action for prod'
+        uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: prod-gcp
+          RESOURCE: .nais/nais.yaml
+          VAR: image=${{ needs.build.outputs.docker-image }}
+          VARS: .nais/prod.yaml
+          PRINT_PAYLOAD: true
