@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>no.nav.eux.slett.usendte.rinasaker</groupId>
-    <artifactId>git</artifactId>
+    <artifactId>eux-slett-usendte-rinasaker</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
