@@ -64,6 +64,14 @@ spec:
       enabled: true
       runtime: java
   accessPolicy:
+    inbound:
+      rules:
+        - application: {{ application.eux-slett-usendte-rinasaker-til-sletting-naisjob.name }}
+          namespace: {{ application.eux-slett-usendte-rinasaker-til-sletting-naisjob.namespace }}
+          cluster: {{ cluster.gcp }}
+        - application: {{ application.eux-slett-usendte-rinasaker-slett-naisjob.name }}
+          namespace: {{ application.eux-slett-usendte-rinasaker-slett-naisjob.namespace }}
+          cluster: {{ cluster.gcp }}
     outbound:
       rules:
         - application: {{ application.eux-rina-terminator-api.name }}

@@ -20,3 +20,11 @@ application:
     name: eux-rina-terminator-api-q2
     endpoint: http://eux-rina-terminator-api-q2
     scope: api://dev-gcp.eessibasis.eux-rina-terminator-api-q2/.default
+
+  eux-slett-usendte-rinasaker-til-sletting-naisjob:
+    name: eux-slett-usendte-rinasaker-til-sletting-naisjob-q2
+    namespace: eessibasis
+
+  eux-slett-usendte-rinasaker-slett-naisjob:
+    name: eux-slett-usendte-rinasaker-slett-naisjob-q2
+    namespace: eessibasis

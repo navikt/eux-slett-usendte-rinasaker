@@ -26,7 +26,7 @@ class SlettUsendteRinasakerService(
     fun settUsendteRinasakerTilSletting() {
         repository
             .findAllByStatusAndOpprettetTidspunktBefore(NY_SAK, now().minusDays(15))
-            .also { log.info { "$it nye saker ble funnet" } }
+            .also { log.info { "${it.size} nye saker ble funnet" } }
             .filter { it.kanSlettes() }
             .forEach { it.settTilSletting() }
     }
