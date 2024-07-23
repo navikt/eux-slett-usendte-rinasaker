@@ -32,7 +32,7 @@ class MockWebServerConfiguration(
             log.info { "received ${request.method} ${request.requestUrl} with headers=${request.headers}" }
             val body = request.body.readUtf8()
             requestBodies[request.uriEndsWith] = body
-            return mockResponse(request, body)
+            return mockResponse(request)
         }
     }
 }

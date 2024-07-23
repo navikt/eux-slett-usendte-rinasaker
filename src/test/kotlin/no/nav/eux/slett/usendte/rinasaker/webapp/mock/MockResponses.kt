@@ -6,16 +6,16 @@ import org.springframework.http.HttpHeaders.CONTENT_TYPE
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType.TEXT_PLAIN
 
-fun mockResponse(request: RecordedRequest, body: String) =
+fun mockResponse(request: RecordedRequest) =
     when (request.method) {
-        HttpMethod.POST.name() -> mockResponsePost(request, body)
+        HttpMethod.POST.name() -> mockResponsePost(request)
         HttpMethod.GET.name() -> mockResponseGet(request)
         HttpMethod.PATCH.name() -> mockResponsePatch(request)
         HttpMethod.DELETE.name() -> mockResponseDelete(request)
         else -> defaultResponse()
     }
 
-fun mockResponsePost(request: RecordedRequest, body: String) =
+fun mockResponsePost(request: RecordedRequest) =
     when (request.uriEndsWith) {
         "/oauth2/v2.0/token" -> tokenResponse()
         "/api/v1/journalposter/settStatusAvbryt" -> response204()
