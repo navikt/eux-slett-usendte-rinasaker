@@ -42,6 +42,7 @@ class EuxRinaCaseEventsKafkaListener(
         log.info { "Mottok rina document event" }
         when (documentEventType) {
             "SENT_DOCUMENT" -> service.leggTilDokument(rinasakId = caseId, bucType = bucType)
+            "RECEIVE_DOCUMENT" -> service.leggTilDokument(rinasakId = caseId, bucType = bucType)
             else -> log.info { "Mottok documentEventType, ignorerer: $documentEventType" }
         }
     }
