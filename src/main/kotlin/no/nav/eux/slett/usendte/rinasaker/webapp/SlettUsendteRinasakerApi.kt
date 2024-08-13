@@ -86,6 +86,7 @@ class SlettUsendteRinasakerApi(
                 return ResponseEntity(BAD_REQUEST)
             }
         }
+        clearLocalMdc()
         log.info { "sletteprosess utført" }
         return ResponseEntity(NO_CONTENT)
     }
