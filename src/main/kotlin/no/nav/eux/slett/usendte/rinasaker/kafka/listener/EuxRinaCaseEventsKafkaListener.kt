@@ -6,8 +6,10 @@ import no.nav.eux.slett.usendte.rinasaker.kafka.model.document.KafkaRinaDocument
 import no.nav.eux.slett.usendte.rinasaker.service.SlettUsendteRinasakerService
 import no.nav.eux.slett.usendte.rinasaker.service.mdc
 import org.apache.kafka.clients.consumer.ConsumerRecord
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
+import java.lang.Thread.sleep
 
 @Service
 class EuxRinaCaseEventsKafkaListener(
@@ -26,7 +28,17 @@ class EuxRinaCaseEventsKafkaListener(
         val processDefinitionName = consumerRecord.value().payLoad.restCase.processDefinitionName
         mdc(rinasakId = caseId, bucType = processDefinitionName)
         log.info { "Mottok rina case event" }
-        service.leggTilSak(rinasakId = caseId, bucType = processDefinitionName)
+        try {
+            service.leggTilSak(rinasakId = caseId, bucType = processDefinitionName)
+        } catch (e: DataIntegrityViolationException) {
+            sleep(1000)
+            log.info(e) { "Feil ved lagring av sak, forsøker igjen" }
+            service.leggTilSak(rinasakId = caseId, bucType = processDefinitionName)
+            log.info { "Lagt til sak ok ved retry" }
+        } catch (e: Exception) {
+            log.error(e) { "Feil ved lagring av sak" }
+            throw e
+        }
     }
 
     @KafkaListener(
@@ -41,9 +53,23 @@ class EuxRinaCaseEventsKafkaListener(
         mdc(rinasakId = caseId, bucType = bucType)
         log.info { "Mottok rina document event" }
         when (documentEventType) {
-            "SENT_DOCUMENT" -> service.leggTilDokument(rinasakId = caseId, bucType = bucType)
-            "RECEIVE_DOCUMENT" -> service.leggTilDokument(rinasakId = caseId, bucType = bucType)
+            "SENT_DOCUMENT" -> leggTilDokument(caseId, bucType)
+            "RECEIVE_DOCUMENT" -> leggTilDokument(caseId, bucType)
             else -> log.info { "Mottok documentEventType, ignorerer: $documentEventType" }
         }
     }
+
+    fun leggTilDokument(caseId: Int, bucType: String) =
+        try {
+            service.leggTilDokument(rinasakId = caseId, bucType = bucType)
+        } catch (e: DataIntegrityViolationException) {
+            sleep(1000)
+            log.info(e) { "Feil ved lagring av dokument, forsøker igjen" }
+            service.leggTilDokument(rinasakId = caseId, bucType = bucType)
+            log.info { "Dokument info ok ved retry" }
+        } catch (e: Exception) {
+            log.error(e) { "Feil ved lagring av dokument" }
+            throw e
+        }
+
 }
