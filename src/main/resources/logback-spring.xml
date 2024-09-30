@@ -6,4 +6,7 @@
     <root level="INFO">
         <appender-ref ref="stdout"/>
     </root>
+
+    <logger name="org.hibernate.engine.jdbc.spi.SqlExceptionHelper" level="OFF"/>
+
 </configuration>
