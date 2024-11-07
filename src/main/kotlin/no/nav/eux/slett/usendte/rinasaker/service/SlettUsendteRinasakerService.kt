@@ -1,6 +1,7 @@
 package no.nav.eux.slett.usendte.rinasaker.service
 
 import io.github.oshai.kotlinlogging.KotlinLogging.logger
+import no.nav.eux.logging.mdc
 import no.nav.eux.slett.usendte.rinasaker.integration.RinaSlettClient
 import no.nav.eux.slett.usendte.rinasaker.model.RinasakStatus
 import no.nav.eux.slett.usendte.rinasaker.model.RinasakStatus.Status.*

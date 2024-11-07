@@ -1,10 +1,10 @@
 package no.nav.eux.slett.usendte.rinasaker.kafka.listener
 
 import io.github.oshai.kotlinlogging.KotlinLogging.logger
+import no.nav.eux.logging.mdc
 import no.nav.eux.slett.usendte.rinasaker.kafka.model.case.KafkaRinaCase
 import no.nav.eux.slett.usendte.rinasaker.kafka.model.document.KafkaRinaDocument
 import no.nav.eux.slett.usendte.rinasaker.service.SlettUsendteRinasakerService
-import no.nav.eux.slett.usendte.rinasaker.service.mdc
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.kafka.annotation.KafkaListener

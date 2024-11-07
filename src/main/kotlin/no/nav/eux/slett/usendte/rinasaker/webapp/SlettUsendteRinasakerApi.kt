@@ -4,9 +4,9 @@ import io.github.oshai.kotlinlogging.KotlinLogging.logger
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import no.nav.eux.logging.clearLocalMdc
+import no.nav.eux.logging.mdc
 import no.nav.eux.slett.usendte.rinasaker.service.SlettUsendteRinasakerService
-import no.nav.eux.slett.usendte.rinasaker.service.clearLocalMdc
-import no.nav.eux.slett.usendte.rinasaker.service.mdc
 import no.nav.security.token.support.core.api.Unprotected
 import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.NO_CONTENT
