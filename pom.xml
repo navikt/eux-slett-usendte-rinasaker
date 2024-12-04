@@ -7,7 +7,7 @@
     <parent>
         <groupId>no.nav.eux</groupId>
         <artifactId>parent-pom</artifactId>
-        <version>1.0.23</version>
+        <version>1.0.25</version>
     </parent>
 
     <groupId>no.nav.eux.slett.usendte.rinasaker</groupId>
@@ -108,10 +108,6 @@
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>net.logstash.logback</groupId>
-            <artifactId>logstash-logback-encoder</artifactId>
         </dependency>
         <dependency>
             <groupId>no.nav.eux</groupId>
