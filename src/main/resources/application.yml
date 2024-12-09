@@ -24,6 +24,11 @@ spring:
     clean-on-validation-error: true
     clean-disabled: false
 
+logging:
+  structured:
+    format:
+      console: logstash
+
 kafka:
   topics:
     eux-rina-document-events-v1: ${KAFKA_TOPICS_EUX_RINA_DOCUMENT_EVENTS_V1}
