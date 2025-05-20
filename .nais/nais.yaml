@@ -11,7 +11,7 @@ spec:
     - {{ ingress }}
   gcp:
     sqlInstances:
-      - type: POSTGRES_15
+      - type: POSTGRES_17
         diskAutoresize: true
         tier: {{ database.tier }}
         databases:
@@ -35,8 +35,8 @@ spec:
     initialDelay: 40
     timeout: 90
   replicas:
-    min: 1
-    max: 2
+    min: 0
+    max: 0
     cpuThresholdPercentage: 50
   resources:
     limits:
