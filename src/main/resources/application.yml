@@ -21,7 +21,6 @@ spring:
         format_sql: false
 
   flyway:
-    clean-on-validation-error: true
     clean-disabled: false
 
 logging:
