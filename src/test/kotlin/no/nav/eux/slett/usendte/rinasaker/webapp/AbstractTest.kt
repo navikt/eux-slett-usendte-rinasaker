@@ -6,17 +6,18 @@ import no.nav.eux.slett.usendte.rinasaker.webapp.mock.RequestBodies
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.resttestclient.TestRestTemplate
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpEntity
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
-import org.testcontainers.containers.KafkaContainer
-import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
+import org.testcontainers.kafka.KafkaContainer
+import org.testcontainers.postgresql.PostgreSQLContainer
 import org.testcontainers.utility.DockerImageName
 
 @ActiveProfiles("test")
@@ -26,21 +27,20 @@ import org.testcontainers.utility.DockerImageName
 )
 @EnableMockOAuth2Server
 @Testcontainers
+@AutoConfigureTestRestTemplate
 abstract class AbstractTest {
 
     companion object {
 
         @JvmStatic
         @Container
-        val postgres: PostgreSQLContainer<*> = PostgreSQLContainer(
+        val postgres: PostgreSQLContainer = PostgreSQLContainer(
             "postgres:15-alpine"
         )
 
         @JvmStatic
         @Container
-        val kafka = KafkaContainer(
-            DockerImageName.parse("confluentinc/cp-kafka:7.6.1")
-        )
+        val kafka = KafkaContainer(DockerImageName.parse("apache/kafka-native:3.8.0"))
 
         @JvmStatic
         @DynamicPropertySource
@@ -53,7 +53,7 @@ abstract class AbstractTest {
         }
     }
 
-    val <T> T.httpEntity: HttpEntity<T>
+    val <T : Any> T.httpEntity: HttpEntity<T>
         get() = httpEntity(mockOAuth2Server)
 
     fun httpEntity() = voidHttpEntity(mockOAuth2Server)
