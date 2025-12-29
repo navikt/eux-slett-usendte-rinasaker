@@ -20,6 +20,7 @@ class EuxRinaCaseEventsKafkaListener(
 
     @KafkaListener(
         id = "eux-slett-usendte-rinasaker-case",
+        groupId = "eux-slett-usendte-rinasaker-case",
         topics = ["\${kafka.topics.eux-rina-case-events-v1}"],
         containerFactory = "rinaCaseKafkaListenerContainerFactory"
     )
@@ -43,6 +44,7 @@ class EuxRinaCaseEventsKafkaListener(
 
     @KafkaListener(
         id = "eux-slett-usendte-rinasaker-document",
+        groupId = "eux-slett-usendte-rinasaker-document",
         topics = ["\${kafka.topics.eux-rina-document-events-v1}"],
         containerFactory = "rinaDocumentKafkaListenerContainerFactory"
     )
