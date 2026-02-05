@@ -4,20 +4,20 @@ import io.github.oshai.kotlinlogging.KotlinLogging.logger
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.stereotype.Service
-import org.springframework.web.client.RestTemplate
+import org.springframework.web.client.RestClient
 import org.springframework.web.client.body
 
 @Service
 class RinaSlettClient(
     @Value("\${endpoint.eux-rina-terminator-api}")
     val euxRinaTerminatorApiEndpoint: String,
-    val euxRinaTerminatorApiRestTemplate: RestTemplate
+    val euxRinaTerminatorApiRestClient: RestClient
 ) {
 
     val log = logger {}
 
     fun slettRinasak(rinasakId: Int) {
-        euxRinaTerminatorApiRestTemplate
+        euxRinaTerminatorApiRestClient
             .delete()
             .uri("${euxRinaTerminatorApiEndpoint}/api/v1/rinasaker/$rinasakId")
             .retrieve()
@@ -25,7 +25,7 @@ class RinaSlettClient(
         log.info { "Sletter $rinasakId" }
     }
 
-    fun kanSlettes(rinasakId: Int) = euxRinaTerminatorApiRestTemplate
+    fun kanSlettes(rinasakId: Int) = euxRinaTerminatorApiRestClient
         .get()
         .uri("${euxRinaTerminatorApiEndpoint}/api/v1/rinasaker/$rinasakId/status")
         .accept(APPLICATION_JSON)
