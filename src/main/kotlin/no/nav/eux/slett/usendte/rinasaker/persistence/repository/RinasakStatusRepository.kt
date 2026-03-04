@@ -18,4 +18,10 @@ interface RinasakStatusRepository : JpaRepository<RinasakStatus, UUID> {
     fun findAllByStatus(
         status: RinasakStatus.Status
     ): List<RinasakStatus>
+
+    fun findAllByStatusAndEndretTidspunktBetween(
+        status: RinasakStatus.Status,
+        from: LocalDateTime,
+        to: LocalDateTime
+    ): List<RinasakStatus>
 }

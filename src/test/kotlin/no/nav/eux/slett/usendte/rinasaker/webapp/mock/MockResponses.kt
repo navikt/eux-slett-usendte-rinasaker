@@ -19,6 +19,7 @@ fun mockResponsePost(request: RecordedRequest) =
     when (request.uriEndsWith) {
         "/oauth2/v2.0/token" -> tokenResponse()
         "/api/v1/journalposter/settStatusAvbryt" -> response204()
+        "/slack/webhook" -> response200()
         else -> defaultResponse()
     }
 

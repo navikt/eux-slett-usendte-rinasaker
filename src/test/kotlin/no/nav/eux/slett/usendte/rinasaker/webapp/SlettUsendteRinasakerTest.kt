@@ -7,14 +7,34 @@ import org.assertj.core.api.Assertions.assertThat
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.has
 import org.awaitility.kotlin.untilCallTo
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestMethodOrder
 import org.springframework.boot.resttestclient.exchange
 import org.springframework.http.HttpMethod.POST
 import java.time.LocalDateTime.now
 
+@TestMethodOrder(OrderAnnotation::class)
 class SlettUsendteRinasakerTest : AbstractTest() {
 
     @Test
+    @Order(1)
+    fun `NOT_FOUND rapport uten treff sender ingen-melding`() {
+        requestBodies.clear()
+        restTemplate
+            .exchange<Void>(
+                "/api/v1/sletteprosess/not-found-rapport/execute",
+                POST,
+                httpEntity()
+            )
+        val slackBody = requestBodies["/slack/webhook"]
+        assertThat(slackBody).isNotNull()
+        assertThat(slackBody).contains("Ingen rinasaker satt til NOT_FOUND")
+    }
+
+    @Test
+    @Order(2)
     fun `Nye rinasaker og dokumenter fra Kafka - sletting staged og eksekvert`() {
         assertThat(kafka.isRunning).isTrue
         assertThat(postgres.isRunning).isTrue
@@ -72,6 +92,20 @@ class SlettUsendteRinasakerTest : AbstractTest() {
         assertThat(requestBodies["/api/v1/rinasaker/6"]).isNotNull()
         assertThat(rinasakStatus(3)).isEqualTo(SLETTET)
         assertThat(rinasakStatus(6)).isEqualTo(NOT_FOUND)
+        manipulerEndretTidspunktForNotFound()
+        requestBodies.clear()
+        restTemplate
+            .exchange<Void>(
+                "/api/v1/sletteprosess/not-found-rapport/execute",
+                POST,
+                httpEntity()
+            )
+        println("Følgende requests ble utført i prosessen not-found-rapport:")
+        requestBodies.forEach { println("Path: ${it.key}, body: ${it.value}") }
+        val slackBody = requestBodies["/slack/webhook"]
+        assertThat(slackBody).isNotNull()
+        assertThat(slackBody).contains("NOT_FOUND")
+        assertThat(slackBody).contains("6")
     }
 
     fun rinasakStatus(rinasakId: Int) = rinasakStatusRepository.findByRinasakId(rinasakId)!!.status
@@ -93,5 +127,12 @@ class SlettUsendteRinasakerTest : AbstractTest() {
             .findByRinasakId(6)!!
             .copy(opprettetTidspunkt = now().minusDays(32))
         rinasakStatusRepository.save(rinasakNotFound)
+    }
+
+    fun manipulerEndretTidspunktForNotFound() {
+        val notFoundSak = rinasakStatusRepository
+            .findByRinasakId(6)!!
+            .copy(endretTidspunkt = now().minusMonths(1).withDayOfMonth(15))
+        rinasakStatusRepository.save(notFoundSak)
     }
 }
