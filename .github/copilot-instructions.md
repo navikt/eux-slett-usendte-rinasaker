@@ -25,7 +25,7 @@ Kotlin/Spring Boot service that deletes RINA cases which were created but never 
 - `persistence` — JPA repository for `RinasakStatus` entity with Flyway migrations
 - `webapp` — REST API that triggers the deletion process
 
-**State machine:** `RinasakStatus` tracks each case through: `NY_SAK` → `TIL_SLETTING` → `SLETTET` (or `HAR_DOKUMENTER` if a document arrives).
+**State machine:** `RinasakStatus` tracks each case through: `NY_SAK` → `TIL_SLETTING` → `SLETTET` (or `DOKUMENT_SENT` if a document arrives).
 
 ## Conventions
 
