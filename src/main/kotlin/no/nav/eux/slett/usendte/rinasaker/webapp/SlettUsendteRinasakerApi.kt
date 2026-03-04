@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import no.nav.eux.logging.clearLocalMdc
 import no.nav.eux.logging.mdc
+import no.nav.eux.slett.usendte.rinasaker.service.NotFoundRapportService
 import no.nav.eux.slett.usendte.rinasaker.service.SlettUsendteRinasakerService
 import no.nav.security.token.support.core.api.Unprotected
 import org.springframework.http.HttpStatus.BAD_REQUEST
@@ -22,7 +23,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("\${api.base-path:/api/v1}")
 @RestController
 class SlettUsendteRinasakerApi(
-    val service: SlettUsendteRinasakerService
+    val service: SlettUsendteRinasakerService,
+    val notFoundRapportService: NotFoundRapportService
 ) {
 
     val log = logger {}
@@ -69,6 +71,7 @@ class SlettUsendteRinasakerApi(
                 Navnet på prosessen som skal startes:   
                     * `til-sletting` - Markerer usendte rinasaker for sletting   
                     * `slett` - Utfører sletting mot Rina
+                    * `not-found-rapport` - Sender månedlig NOT_FOUND rapport til Slack
                     """,
             required = true
         )
@@ -81,6 +84,7 @@ class SlettUsendteRinasakerApi(
         when (sletteprosess) {
             "til-sletting" -> service.settUsendteRinasakerTilSletting()
             "slett" -> service.slettUsendteRinasaker()
+            "not-found-rapport" -> notFoundRapportService.sendNotFoundRapport()
             else -> {
                 log.error { "ukjent sletteprosess: $sletteprosess" }
                 return ResponseEntity(BAD_REQUEST)

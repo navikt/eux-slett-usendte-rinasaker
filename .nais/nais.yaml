@@ -76,8 +76,12 @@ spec:
           namespace: {{ application.eux-slett-usendte-rinasaker-slett-naisjob.namespace }}
           cluster: {{ cluster.gcp }}
     outbound:
+      external:
+        - host: hooks.slack.com
       rules:
         - application: {{ application.eux-rina-terminator-api.name }}
+  envFrom:
+    - secret: slack-team-eessi-nav-driftsoppfolging-webhook
   env:
     - name: KAFKA_TOPICS_EUX_RINA_DOCUMENT_EVENTS_V1
       value: {{ kafka.topics.eux-rina-document-events-v1 }}

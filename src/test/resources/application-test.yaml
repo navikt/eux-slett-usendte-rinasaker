@@ -42,3 +42,7 @@ spring:
           json:
             trusted:
              packages: no.nav.eux.slett.usendte.rinasaker
+
+slack:
+  webhooks:
+    driftsoppfolging: http://localhost:9500/mock/slack/webhook
