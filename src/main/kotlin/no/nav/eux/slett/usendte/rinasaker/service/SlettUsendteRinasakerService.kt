@@ -93,7 +93,7 @@ class SlettUsendteRinasakerService(
         val rinasakStatus = repository
             .findByRinasakId(rinasakId)
             ?: rinasakStatus(rinasakId, bucType, DOKUMENT_SENT)
-        repository.save(rinasakStatus.copy(status = DOKUMENT_SENT))
+        repository.save(rinasakStatus.copy(status = DOKUMENT_SENT, endretTidspunkt = now()))
         log.info { "Dokument lagt til" }
     }
 
