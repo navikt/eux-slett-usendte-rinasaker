@@ -18,3 +18,9 @@ fun response404() =
         setResponseCode(404)
         setBody("Feilet kall mot RINA: ")
     }
+
+fun response500() =
+    MockResponse().apply {
+        setResponseCode(500)
+        setBody("Internal Server Error")
+    }

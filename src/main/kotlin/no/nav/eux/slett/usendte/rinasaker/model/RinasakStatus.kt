@@ -22,6 +22,7 @@ data class RinasakStatus(
     val endretTidspunkt: LocalDateTime = now(),
 ) {
     enum class Status {
-        NY_SAK, DOKUMENT_SENT, TIL_SLETTING, SLETTET, KAN_IKKE_SLETTES, KORRUPT, NOT_FOUND
+        NY_SAK, DOKUMENT_SENT, TIL_SLETTING, SLETTET, KAN_IKKE_SLETTES, KORRUPT, NOT_FOUND,
+        SLETTING_FEILET_RETRY, SLETTING_FEILET
     }
 }

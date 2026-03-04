@@ -20,8 +20,8 @@ class SlettUsendteRinasakerService(
     val log = logger {}
 
     fun slettUsendteRinasaker() {
-        repository
-            .findAllByStatus(TIL_SLETTING)
+        (repository.findAllByStatus(TIL_SLETTING) +
+            repository.findAllByStatus(SLETTING_FEILET_RETRY))
             .forEach { it.trySlett() }
     }
 
@@ -59,6 +59,17 @@ class SlettUsendteRinasakerService(
             log.info { "Rinasak status oppdatert til NOT_FOUND" }
         } catch (e: Exception) {
             log.error(e) { "Kunne ikke slette rinasak $rinasakId" }
+            when (status) {
+                TIL_SLETTING -> {
+                    repository.save(copy(status = SLETTING_FEILET_RETRY, endretTidspunkt = now()))
+                    log.info { "Rinasak status oppdatert til SLETTING_FEILET_RETRY, forsøkes igjen ved neste kjøring" }
+                }
+                SLETTING_FEILET_RETRY -> {
+                    repository.save(copy(status = SLETTING_FEILET, endretTidspunkt = now()))
+                    log.info { "Rinasak status oppdatert til SLETTING_FEILET, gir opp videre sletting" }
+                }
+                else -> log.error { "Uventet status $status ved feilet sletting av rinasak $rinasakId" }
+            }
         }
 
     fun RinasakStatus.slett() {
