@@ -33,4 +33,5 @@ Kotlin/Spring Boot service that deletes RINA cases which were created but never 
 - **REST clients:** Configure via `RestClient.builder()` with an `OAuth2AccessTokenService` interceptor for bearer tokens. Registration names match `application.yml` client config.
 - **Kafka models:** Separate data class hierarchies under `kafka.model.case` and `kafka.model.document` — use `@JsonIgnoreProperties(ignoreUnknown = true)` on all Kafka DTOs.
 - **Entity updates:** Use `copy()` on data class entities rather than mutable setters.
+- **Expression bodies:** Prefer expression body syntax (`fun f() = ...`) over block body (`fun f() { ... }`) for functions, including `try`/`catch` expressions.
 - **Tests:** Integration tests extend `AbstractTest`, which provides shared Testcontainers (PostgreSQL + Kafka), `MockWebServer` for external APIs, and `MockOAuth2Server` for JWT. Use Awaitility for async assertions after Kafka events.

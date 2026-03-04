@@ -20,11 +20,10 @@ class SlackService(
         else -> "prod"
     }
 
-    fun post(tekst: String) {
+    fun post(tekst: String) =
         try {
             slackClient.post("`[$environment]` `[slett-usendte-rinasaker]` $tekst")
         } catch (e: RuntimeException) {
             log.error(e) { "Feilet å sende Slack-melding: $tekst" }
         }
-    }
 }
