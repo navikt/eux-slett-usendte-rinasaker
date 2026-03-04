@@ -7,6 +7,7 @@ import no.nav.eux.slett.usendte.rinasaker.model.RinasakStatus
 import no.nav.eux.slett.usendte.rinasaker.model.RinasakStatus.Status.*
 import no.nav.eux.slett.usendte.rinasaker.persistence.repository.RinasakStatusRepository
 import org.springframework.stereotype.Service
+import org.springframework.web.client.HttpClientErrorException
 import java.time.LocalDateTime.now
 import java.util.UUID.randomUUID
 
@@ -52,6 +53,10 @@ class SlettUsendteRinasakerService(
         try {
             mdc(rinasakId = rinasakId, bucType = bucType)
             slett()
+        } catch (e: HttpClientErrorException.NotFound) {
+            log.error(e) { "Kunne ikke slette rinasak $rinasakId" }
+            repository.save(copy(status = NOT_FOUND, endretTidspunkt = now()))
+            log.info { "Rinasak status oppdatert til NOT_FOUND" }
         } catch (e: Exception) {
             log.error(e) { "Kunne ikke slette rinasak $rinasakId" }
         }
