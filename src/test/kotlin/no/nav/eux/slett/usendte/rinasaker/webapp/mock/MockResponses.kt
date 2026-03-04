@@ -36,6 +36,7 @@ fun mockResponseGet(request: RecordedRequest) =
         "/api/v1/rinasaker/4/status" -> getEuxRinaTerminatorApiStatusResponseTrue()
         "/api/v1/rinasaker/5/status" -> getEuxRinaTerminatorApiStatusResponseFalse()
         "/api/v1/rinasaker/6/status" -> getEuxRinaTerminatorApiStatusResponseTrue()
+        "/api/v1/rinasaker/7/status" -> getEuxRinaTerminatorApiStatusResponseTrue()
         else -> defaultResponse()
     }
 
@@ -43,6 +44,7 @@ fun mockResponseDelete(request: RecordedRequest) =
     when (request.uriEndsWith) {
         "/api/v1/rinasaker/3" -> response204()
         "/api/v1/rinasaker/6" -> response404()
+        "/api/v1/rinasaker/7" -> response500()
         else -> defaultResponse()
     }
 
