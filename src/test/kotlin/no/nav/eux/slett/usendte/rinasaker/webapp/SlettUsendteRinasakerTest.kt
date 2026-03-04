@@ -20,17 +20,18 @@ class SlettUsendteRinasakerTest : AbstractTest() {
 
     @Test
     @Order(1)
-    fun `NOT_FOUND rapport uten treff sender ingen-melding`() {
+    fun `Rapport uten treff sender tom rapport`() {
         requestBodies.clear()
         restTemplate
             .exchange<Void>(
-                "/api/v1/sletteprosess/not-found-rapport/execute",
+                "/api/v1/sletteprosess/rapport/execute",
                 POST,
                 httpEntity()
             )
         val slackBody = requestBodies["/slack/webhook"]
         assertThat(slackBody).isNotNull()
-        assertThat(slackBody).contains("Ingen rinasaker satt til NOT_FOUND")
+        assertThat(slackBody).contains("Månedlig rapport")
+        assertThat(slackBody).contains("Slettet: 0")
     }
 
     @Test
@@ -104,20 +105,23 @@ class SlettUsendteRinasakerTest : AbstractTest() {
                 httpEntity()
             )
         assertThat(rinasakStatus(7)).isEqualTo(SLETTING_FEILET)
-        manipulerEndretTidspunktForNotFound()
+        manipulerEndretTidspunktForRapport()
         requestBodies.clear()
         restTemplate
             .exchange<Void>(
-                "/api/v1/sletteprosess/not-found-rapport/execute",
+                "/api/v1/sletteprosess/rapport/execute",
                 POST,
                 httpEntity()
             )
-        println("Følgende requests ble utført i prosessen not-found-rapport:")
+        println("Følgende requests ble utført i prosessen rapport:")
         requestBodies.forEach { println("Path: ${it.key}, body: ${it.value}") }
         val slackBody = requestBodies["/slack/webhook"]
         assertThat(slackBody).isNotNull()
-        assertThat(slackBody).contains("NOT_FOUND")
-        assertThat(slackBody).contains("6")
+        assertThat(slackBody).contains("Månedlig rapport")
+        assertThat(slackBody).contains("Slettet: 1")
+        assertThat(slackBody).contains("Not found: 1")
+        assertThat(slackBody).contains("Sletting feilet: 1")
+        assertThat(slackBody).contains("Kan ikke slettes: 1")
     }
 
     fun rinasakStatus(rinasakId: Int) = rinasakStatusRepository.findByRinasakId(rinasakId)!!.status
@@ -145,10 +149,13 @@ class SlettUsendteRinasakerTest : AbstractTest() {
         rinasakStatusRepository.save(rinasakSlettingFeiler)
     }
 
-    fun manipulerEndretTidspunktForNotFound() {
-        val notFoundSak = rinasakStatusRepository
-            .findByRinasakId(6)!!
-            .copy(endretTidspunkt = now().minusMonths(1).withDayOfMonth(15))
-        rinasakStatusRepository.save(notFoundSak)
+    fun manipulerEndretTidspunktForRapport() {
+        val forrigeMaaned = now().minusMonths(1).withDayOfMonth(15)
+        listOf(3, 5, 6, 7).forEach { rinasakId ->
+            val sak = rinasakStatusRepository
+                .findByRinasakId(rinasakId)!!
+                .copy(endretTidspunkt = forrigeMaaned)
+            rinasakStatusRepository.save(sak)
+        }
     }
 }

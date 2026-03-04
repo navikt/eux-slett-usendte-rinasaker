@@ -24,4 +24,12 @@ interface RinasakStatusRepository : JpaRepository<RinasakStatus, UUID> {
         from: LocalDateTime,
         to: LocalDateTime
     ): List<RinasakStatus>
+
+    fun countByStatusAndEndretTidspunktBetween(
+        status: RinasakStatus.Status,
+        from: LocalDateTime,
+        to: LocalDateTime
+    ): Long
+
+    fun countByStatus(status: RinasakStatus.Status): Long
 }

@@ -28,3 +28,7 @@ application:
   eux-slett-usendte-rinasaker-slett-naisjob:
     name: eux-slett-usendte-rinasaker-slett-naisjob
     namespace: eessibasis
+
+  eux-slett-usendte-rinasaker-rapport-naisjob:
+    name: eux-slett-usendte-rinasaker-rapport-naisjob
+    namespace: eessibasis

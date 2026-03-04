@@ -75,6 +75,9 @@ spec:
         - application: {{ application.eux-slett-usendte-rinasaker-slett-naisjob.name }}
           namespace: {{ application.eux-slett-usendte-rinasaker-slett-naisjob.namespace }}
           cluster: {{ cluster.gcp }}
+        - application: {{ application.eux-slett-usendte-rinasaker-rapport-naisjob.name }}
+          namespace: {{ application.eux-slett-usendte-rinasaker-rapport-naisjob.namespace }}
+          cluster: {{ cluster.gcp }}
     outbound:
       external:
         - host: hooks.slack.com
