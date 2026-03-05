@@ -11,8 +11,6 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestMethodOrder
-import org.springframework.boot.resttestclient.exchange
-import org.springframework.http.HttpMethod.POST
 import java.time.LocalDateTime.now
 
 @TestMethodOrder(OrderAnnotation::class)
@@ -22,12 +20,12 @@ class SlettUsendteRinasakerTest : AbstractTest() {
     @Order(1)
     fun `Rapport uten treff sender tom rapport`() {
         requestBodies.clear()
-        restTemplate
-            .exchange<Void>(
-                "/api/v1/sletteprosess/rapport/execute",
-                POST,
-                httpEntity()
-            )
+        restTestClient
+            .post()
+            .uri("/api/v1/sletteprosess/rapport/execute")
+            .headers { it.setBearerAuth(mockOAuth2Server.token) }
+            .exchange()
+            .expectStatus().isNoContent
         val slackBody = requestBodies["/slack/webhook"]
         assertThat(slackBody).isNotNull()
         assertThat(slackBody).contains("Månedlig rapport")
@@ -62,12 +60,12 @@ class SlettUsendteRinasakerTest : AbstractTest() {
             size == 5
         }
         manipulerOpprettetTidspunkt()
-        restTemplate
-            .exchange<Void>(
-                "/api/v1/sletteprosess/til-sletting/execute",
-                POST,
-                httpEntity()
-            )
+        restTestClient
+            .post()
+            .uri("/api/v1/sletteprosess/til-sletting/execute")
+            .headers { it.setBearerAuth(mockOAuth2Server.token) }
+            .exchange()
+            .expectStatus().isNoContent
         println("Følgende requests ble utført i prosessen til sletting:")
         requestBodies.forEach { println("Path: ${it.key}, body: ${it.value}") }
         assertThat(requestBodies["/api/v1/rinasaker/1/status"]).isNull()
@@ -84,12 +82,12 @@ class SlettUsendteRinasakerTest : AbstractTest() {
         assertThat(rinasakStatus(5)).isEqualTo(KAN_IKKE_SLETTES)
         assertThat(rinasakStatus(6)).isEqualTo(TIL_SLETTING)
         assertThat(rinasakStatus(7)).isEqualTo(TIL_SLETTING)
-        restTemplate
-            .exchange<Void>(
-                "/api/v1/sletteprosess/slett/execute",
-                POST,
-                httpEntity()
-            )
+        restTestClient
+            .post()
+            .uri("/api/v1/sletteprosess/slett/execute")
+            .headers { it.setBearerAuth(mockOAuth2Server.token) }
+            .exchange()
+            .expectStatus().isNoContent
         println("Følgende requests ble utført i prosessen slett:")
         requestBodies.forEach { println("Path: ${it.key}, body: ${it.value}") }
         assertThat(requestBodies["/api/v1/rinasaker/3"]).isNotNull()
@@ -98,21 +96,21 @@ class SlettUsendteRinasakerTest : AbstractTest() {
         assertThat(rinasakStatus(3)).isEqualTo(SLETTET)
         assertThat(rinasakStatus(6)).isEqualTo(NOT_FOUND)
         assertThat(rinasakStatus(7)).isEqualTo(SLETTING_FEILET_RETRY)
-        restTemplate
-            .exchange<Void>(
-                "/api/v1/sletteprosess/slett/execute",
-                POST,
-                httpEntity()
-            )
+        restTestClient
+            .post()
+            .uri("/api/v1/sletteprosess/slett/execute")
+            .headers { it.setBearerAuth(mockOAuth2Server.token) }
+            .exchange()
+            .expectStatus().isNoContent
         assertThat(rinasakStatus(7)).isEqualTo(SLETTING_FEILET)
         manipulerEndretTidspunktForRapport()
         requestBodies.clear()
-        restTemplate
-            .exchange<Void>(
-                "/api/v1/sletteprosess/rapport/execute",
-                POST,
-                httpEntity()
-            )
+        restTestClient
+            .post()
+            .uri("/api/v1/sletteprosess/rapport/execute")
+            .headers { it.setBearerAuth(mockOAuth2Server.token) }
+            .exchange()
+            .expectStatus().isNoContent
         println("Følgende requests ble utført i prosessen rapport:")
         requestBodies.forEach { println("Path: ${it.key}, body: ${it.value}") }
         val slackBody = requestBodies["/slack/webhook"]

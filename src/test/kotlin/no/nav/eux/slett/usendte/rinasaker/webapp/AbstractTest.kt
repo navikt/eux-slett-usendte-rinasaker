@@ -6,10 +6,9 @@ import no.nav.eux.slett.usendte.rinasaker.webapp.mock.RequestBodies
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.resttestclient.TestRestTemplate
-import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate
+import org.springframework.test.web.servlet.client.RestTestClient
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.http.HttpEntity
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.DynamicPropertyRegistry
@@ -27,7 +26,7 @@ import org.testcontainers.utility.DockerImageName
 )
 @EnableMockOAuth2Server
 @Testcontainers
-@AutoConfigureTestRestTemplate
+@AutoConfigureRestTestClient
 abstract class AbstractTest {
 
     companion object {
@@ -53,16 +52,11 @@ abstract class AbstractTest {
         }
     }
 
-    val <T : Any> T.httpEntity: HttpEntity<T>
-        get() = httpEntity(mockOAuth2Server)
-
-    fun httpEntity() = voidHttpEntity(mockOAuth2Server)
-
     @Autowired
     lateinit var mockOAuth2Server: MockOAuth2Server
 
     @Autowired
-    lateinit var restTemplate: TestRestTemplate
+    lateinit var restTestClient: RestTestClient
 
     @Autowired
     lateinit var kafkaTemplate: KafkaTemplate<String, Any>
