@@ -18,7 +18,8 @@
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <flyway.version>12.9.0</flyway.version>
+        <flyway.version>13.2.0</flyway.version>
+        <postgresql.version>42.7.13</postgresql.version>
     </properties>
 
     <scm>
@@ -93,6 +94,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.oshai</groupId>
