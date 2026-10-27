@@ -10,4 +10,4 @@ innen en gitt tidsperiode.
 
 #### Avhengigheter
 
-* JDK 21
+* JDK 25
